@@ -122,7 +122,9 @@ const palette = [
   { at: 4, accent: [178, 199, 122] },
   { at: 9, accent: [224, 188, 112] },
   { at: 14, accent: [231, 156, 112] },
-  { at: 19, accent: [229, 138, 138] },
+  // Every Exhausted position is red, starting at the zone boundary.
+  { at: 15, accent: [255, 105, 115] },
+  { at: 19, accent: [255, 77, 90] },
 ];
 
 function stressAccent(value) {
