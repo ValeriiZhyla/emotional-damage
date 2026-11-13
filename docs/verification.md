@@ -43,3 +43,12 @@ on the release PR after publication.
   verification. Physical iPhone testing remains unavailable.
 
 Final CI and post-publication verification are recorded on the revision PR.
+
+## 2026-11-13: Mobile illustration clearance
+
+Reserve 40 px between the gauge and each end illustration on phone widths,
+including short viewports. This accommodates the handle and keyboard focus ring
+at both extremes. Desktop and tablet spacing is unchanged. The rail gives up a
+little height to preserve this clearance; its mobile size check reflects that.
+Offline shell advances to v3 without changing saved state. Browser geometry,
+screenshots, CI and publication results are recorded on the fix PR.

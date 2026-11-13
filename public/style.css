@@ -118,6 +118,8 @@ h1 em { color: var(--accent); font-weight: 400; }
 @media (min-width: 600px) and (min-height: 571px) { .app { width: min(100%, 620px); padding-inline: 40px; } .sheet { margin-bottom: auto; } }
 @media (max-width: 370px) { .app { padding-inline: 20px; } .wordmark { font-size: 11px; } .toolbar { gap: 8px; } .toolbar-actions { gap: 6px; } .zone-title { font-size: 18px; } .zone-caption { font-size: 10px; } .zone { gap: 7px; } }
 @media (max-height: 740px) { .introduction { padding-top: 18px; } h1 { font-size: 34px; } .instrument { margin-top: 8px; } .gauge { margin-block: 4px; } .end-symbol { height: 32px; } .end-symbol svg { height: 33px; } .check-in-footer { padding-top: 12px; } }
+/* Leave room for the full handle and focus ring at either end on phones. */
+@media (max-width: 599px) { .gauge { margin-block: 40px; } }
 @media (min-width: 900px) and (min-height: 571px) {
   .app { width: min(100%, 1200px); padding: clamp(28px, 4svh, 48px) clamp(40px, 5vw, 72px); }
   .wordmark { font-size: 14px; }
