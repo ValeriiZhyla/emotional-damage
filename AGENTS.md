@@ -30,6 +30,13 @@ Keep the tone personal and descriptive; this is not a diagnostic or advice tool.
   Hide haptic settings without support; respect reduced-motion preferences.
 - Support touch, pointer, keyboard and native slider accessibility. Good at the
   top; exhausted at the bottom. Keep 20 steps with five inside each zone.
+- During dragging, follow the latest pointer position once per display frame
+  without position easing; preserve the initial contact offset on the handle.
+  Keep saved/accessibility values discrete, and settle visually onto a tick on
+  release/cancellation. Cancel pending frames when a gesture ends.
+- Mobile uses the available viewport height for a larger gauge. At widths of
+  900px and heights above 570px, use a wide two-column desktop layout; short
+  landscape screens have a compact two-column layout from 600px width.
 - Save on movement; tolerate blocked storage and malformed stored values. Keep
   manual language preference, with browser language used only as the default.
 - Preserve administrator access and other applications. The shared ingress in

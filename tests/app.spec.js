@@ -13,11 +13,15 @@ test('all 20 pointer positions select the correct zone and survive a new page', 
   page.on('pageerror', error => errors.push(error.message));
   await page.goto('/');
   const gauge = await page.locator('#gauge').boundingBox();
+  const handle = await page.locator('#handle').boundingBox();
+  await page.mouse.move(handle.x + handle.width / 2, handle.y + handle.height / 2);
+  await page.mouse.down();
   for (let value = 0; value < 20; value++) {
-    await page.mouse.click(gauge.x + gauge.width * .74, gauge.y + gauge.height * (value + .5) / 20);
+    await page.mouse.move(gauge.x + gauge.width * .74, gauge.y + gauge.height * (value + .5) / 20);
     await expect(page.locator('#stress')).toHaveValue(String(value));
     await expect(page.locator('.zone.selected .zone-title')).toHaveText(titles.en[Math.floor(value / 5)]);
   }
+  await page.mouse.up();
   const second = await context.newPage();
   await second.goto('/');
   await expect(second.locator('#stress')).toHaveValue('19');
@@ -36,6 +40,90 @@ test('dragging tracks the pointer and clamps at both ends', async ({ page }) => 
   await expect(page.locator('#stress')).toHaveValue('0');
   await page.mouse.up();
   await expect(page.locator('#gauge')).not.toHaveClass(/dragging/);
+});
+
+test('fast reversals follow the pointer within a frame and settle on release', async ({ page }) => {
+  await page.goto('/');
+  const gauge = await page.locator('#gauge').boundingBox();
+  const handle = await page.locator('#handle').boundingBox();
+  const x = handle.x + handle.width / 2;
+  await page.mouse.move(x, handle.y + handle.height / 2);
+  await page.mouse.down();
+  for (const fraction of [.84, .18, .91, .36, .63]) {
+    const y = gauge.y + gauge.height * fraction;
+    await page.mouse.move(x, y);
+    await page.evaluate(() => new Promise(requestAnimationFrame));
+    const grip = await page.locator('#handle').boundingBox();
+    expect(Math.abs(grip.y + grip.height / 2 - y)).toBeLessThan(1.5);
+  }
+  await page.mouse.up();
+  await expect(page.locator('#gauge')).not.toHaveClass(/dragging/);
+  const value = Number(await page.locator('#stress').inputValue());
+  const snappedY = gauge.y + gauge.height * (value + .5) / 20;
+  await expect.poll(async () => {
+    const grip = await page.locator('#handle').boundingBox();
+    return Math.abs(grip.y + grip.height / 2 - snappedY);
+  }).toBeLessThan(1);
+  await page.evaluate(() => new Promise(requestAnimationFrame));
+  await expect(page.locator('#stress')).toHaveValue(String(value));
+});
+
+test('grabbing the edge of the handle preserves the contact point', async ({ page }) => {
+  await page.goto('/');
+  const grip = await page.locator('#handle').boundingBox();
+  const x = grip.x + grip.width / 2;
+  const y = grip.y + grip.height - 6;
+  await page.mouse.move(x, y);
+  await page.mouse.down();
+  await expect(page.locator('#stress')).toHaveValue('2');
+  const unchanged = await page.locator('#handle').boundingBox();
+  expect(Math.abs(unchanged.y - grip.y)).toBeLessThan(1);
+  await page.mouse.move(x, y + 46);
+  await page.evaluate(() => new Promise(requestAnimationFrame));
+  const moved = await page.locator('#handle').boundingBox();
+  expect(Math.abs(moved.y - grip.y - 46)).toBeLessThan(1.5);
+  await page.mouse.up();
+});
+
+test('release flushes its final point and cancels pending movement', async ({ page }) => {
+  await page.goto('/');
+  await page.evaluate(() => {
+    document.querySelector('#stress').addEventListener('pointerdown', event => { window.testPointer = event.pointerId; }, { once: true });
+  });
+  const gauge = await page.locator('#gauge').boundingBox();
+  const x = gauge.x + gauge.width * .74;
+  await page.mouse.move(x, gauge.y + gauge.height * .125);
+  await page.mouse.down();
+  await page.evaluate(({ x, y, height }) => {
+    const input = document.querySelector('#stress');
+    input.dispatchEvent(new PointerEvent('pointermove', { pointerId: window.testPointer, clientX: x, clientY: y + height * .7 }));
+    input.dispatchEvent(new PointerEvent('pointerup', { pointerId: window.testPointer, clientX: x, clientY: y + height * .975 }));
+  }, { x, y: gauge.y, height: gauge.height });
+  await page.mouse.up();
+  await page.evaluate(() => new Promise(requestAnimationFrame));
+  await expect(page.locator('#stress')).toHaveValue('19');
+  await expect(page.locator('#gauge')).not.toHaveClass(/dragging/);
+  expect(await page.evaluate(key => JSON.parse(localStorage.getItem(key)).value, KEY)).toBe(19);
+});
+
+test('native touch swipes track rapid direction changes and cancel cleanly', async ({ page, browserName }) => {
+  test.skip(browserName !== 'chromium', 'CDP supplies native touch swipes; mobile WebKit covers shared pointer behavior and native taps.');
+  await page.goto('/');
+  const session = await page.context().newCDPSession(page);
+  const gauge = await page.locator('#gauge').boundingBox();
+  const x = gauge.x + gauge.width * .74;
+  await session.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x, y: gauge.y + gauge.height * .125, id: 1 }] });
+  for (const fraction of [.9, .1, .8, .25]) {
+    const y = gauge.y + gauge.height * fraction;
+    await session.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x, y, id: 1 }] });
+    await page.evaluate(() => new Promise(requestAnimationFrame));
+    const grip = await page.locator('#handle').boundingBox();
+    expect(Math.abs(grip.y + grip.height / 2 - y)).toBeLessThan(2);
+  }
+  await session.send('Input.dispatchTouchEvent', { type: 'touchCancel', touchPoints: [] });
+  await expect(page.locator('#gauge')).not.toHaveClass(/dragging/);
+  expect(await page.evaluate(() => window.scrollY)).toBe(0);
+  await session.detach();
 });
 
 test('touch can set the gauge without scrolling the screen', async ({ page, isMobile }) => {
@@ -174,7 +262,7 @@ test('each language fits small phones, tablets, desktop and landscape without pa
     await page.locator('#open-settings').click();
     await page.locator(`.language-options label:has(input[value="${language}"])`).click();
     await page.locator('#settings-dialog .close-dialog').click();
-    for (const [width, height] of [[320, 568], [375, 812], [440, 956], [768, 1024], [1440, 900], [956, 440]]) {
+    for (const [width, height] of [[320, 568], [375, 812], [440, 956], [768, 1024], [1024, 768], [1280, 720], [1440, 900], [1920, 1080], [956, 440]]) {
       await page.setViewportSize({ width, height });
       const dimensions = await page.evaluate(() => ({ width: document.documentElement.scrollWidth, height: document.documentElement.scrollHeight, viewWidth: innerWidth, viewHeight: innerHeight }));
       expect(dimensions.width, `${language} ${width}x${height} width`).toBeLessThanOrEqual(dimensions.viewWidth);
@@ -184,6 +272,22 @@ test('each language fits small phones, tablets, desktop and landscape without pa
       }
     }
   }
+});
+
+test('mobile gives the gauge more room and desktop uses a wider two-column layout', async ({ page }) => {
+  await page.goto('/');
+  for (const [width, height, minimumGauge] of [[375, 812, 400], [440, 956, 530]]) {
+    await page.setViewportSize({ width, height });
+    const gauge = await page.locator('#gauge').boundingBox();
+    expect(gauge.height).toBeGreaterThan(minimumGauge);
+    expect((await page.locator('#handle').boundingBox()).height).toBeGreaterThanOrEqual(54);
+  }
+  await page.setViewportSize({ width: 1440, height: 900 });
+  const intro = await page.locator('.introduction').boundingBox();
+  const instrument = await page.locator('.instrument').boundingBox();
+  expect(instrument.x).toBeGreaterThan(intro.x + intro.width + 60);
+  expect((await page.locator('.app').boundingBox()).width).toBeGreaterThan(1000);
+  expect((await page.locator('#gauge').boundingBox()).height).toBeGreaterThan(500);
 });
 
 test('modals close with Escape, restore focus and respect reduced motion', async ({ page }) => {

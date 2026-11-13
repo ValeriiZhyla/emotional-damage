@@ -99,11 +99,14 @@ function saveState() {
 const root = document.documentElement;
 const input = document.querySelector('#stress');
 const gauge = document.querySelector('#gauge');
+const handle = document.querySelector('#handle');
 const zoneButtons = [...document.querySelectorAll('[data-zone]')];
 const saveNote = document.querySelector('#save-note');
 const hapticsInput = document.querySelector('#haptics');
 const supportsHaptics = typeof navigator.vibrate === 'function';
-let pointerId = null;
+let drag = null;
+let dragFrame = null;
+let pendingDragY = null;
 let lastTick = 0;
 
 // Centers of twenty equally sized steps keep five positions inside every zone.
@@ -140,7 +143,7 @@ function renderValue() {
   const text = translations[state.language];
   input.value = state.value;
   input.setAttribute('aria-valuetext', text.position(text[`zone${zone}`], state.value % 5 + 1));
-  root.style.setProperty('--position', `${(state.value + .5) * 5}%`);
+  if (!drag) root.style.setProperty('--position', `${(state.value + .5) * 5}%`);
   root.style.setProperty('--paper', moodColor(state.value, 'paper'));
   root.style.setProperty('--accent', moodColor(state.value, 'accent'));
   document.querySelector('meta[name="theme-color"]').content = moodColor(state.value, 'paper');
@@ -183,33 +186,58 @@ function setValue(value, withTick = true) {
   if (withTick) tick(previous);
 }
 
-function valueFromPointer(event) {
-  const bounds = gauge.getBoundingClientRect();
-  return (event.clientY - bounds.top) / bounds.height * 20 - .5;
+function renderDrag(clientY) {
+  if (!drag) return;
+  const value = Math.max(0, Math.min(19, (clientY - drag.top - drag.grabOffset) / drag.height * 20 - .5));
+  setValue(value);
+  // Follow the finger between ticks; the saved/accessibility value stays discrete.
+  root.style.setProperty('--position', `${(value + .5) * 5}%`);
+}
+
+function finishDrag(event) {
+  if (!drag || (event && event.pointerId !== drag.pointerId)) return;
+  if (dragFrame !== null) cancelAnimationFrame(dragFrame);
+  dragFrame = null;
+  if (event?.type === 'pointerup') renderDrag(event.clientY);
+  else if (pendingDragY !== null) renderDrag(pendingDragY);
+  const pointerId = drag.pointerId;
+  drag = null;
+  pendingDragY = null;
+  gauge.classList.remove('dragging');
+  renderValue();
+  if (input.hasPointerCapture(pointerId)) input.releasePointerCapture(pointerId);
 }
 
 input.addEventListener('pointerdown', event => {
-  if (!event.isPrimary || (event.pointerType === 'mouse' && event.button !== 0)) return;
+  if (drag || !event.isPrimary || (event.pointerType === 'mouse' && event.button !== 0)) return;
   event.preventDefault();
-  pointerId = event.pointerId;
+  const bounds = gauge.getBoundingClientRect();
+  const grip = handle.getBoundingClientRect();
+  const onHandle = event.clientX >= grip.left && event.clientX <= grip.right && event.clientY >= grip.top && event.clientY <= grip.bottom;
+  drag = {
+    pointerId: event.pointerId, top: bounds.top, height: bounds.height,
+    grabOffset: onHandle ? event.clientY - (grip.top + grip.height / 2) : 0,
+  };
   input.focus({ preventScroll: true });
-  input.setPointerCapture(pointerId);
+  input.setPointerCapture(event.pointerId);
   gauge.classList.add('dragging');
-  setValue(valueFromPointer(event));
+  renderDrag(event.clientY);
 });
 input.addEventListener('pointermove', event => {
-  if (event.pointerId === pointerId) setValue(valueFromPointer(event));
+  if (event.pointerId !== drag?.pointerId) return;
+  pendingDragY = event.clientY;
+  // A fast swipe can deliver many samples per display frame. Paint only the
+  // latest one, without reading layout or restarting a position animation.
+  if (dragFrame === null) dragFrame = requestAnimationFrame(() => {
+    dragFrame = null;
+    renderDrag(pendingDragY);
+  });
 });
-input.addEventListener('pointerup', event => {
-  if (event.pointerId !== pointerId) return;
-  setValue(valueFromPointer(event));
-  input.releasePointerCapture(pointerId);
-  pointerId = null;
-  gauge.classList.remove('dragging');
-});
-for (const eventName of ['pointercancel', 'lostpointercapture']) {
-  input.addEventListener(eventName, () => { pointerId = null; gauge.classList.remove('dragging'); });
+for (const eventName of ['pointerup', 'pointercancel', 'lostpointercapture']) {
+  input.addEventListener(eventName, finishDrag);
 }
+window.addEventListener('blur', () => finishDrag());
+window.addEventListener('resize', () => finishDrag());
 input.addEventListener('input', () => setValue(Number(input.value)));
 input.addEventListener('keydown', event => {
   const nextValues = {
