@@ -118,20 +118,20 @@ for (let index = 0; index < 20; index++) {
 }
 
 const palette = [
-  { at: 0, paper: [225, 245, 207], accent: [66, 113, 34] },
-  { at: 4, paper: [239, 244, 219], accent: [85, 112, 42] },
-  { at: 9, paper: [249, 238, 202], accent: [126, 95, 29] },
-  { at: 14, paper: [249, 222, 198], accent: [154, 73, 35] },
-  { at: 19, paper: [247, 194, 185], accent: [159, 43, 43] },
+  { at: 0, accent: [151, 199, 123] },
+  { at: 4, accent: [178, 199, 122] },
+  { at: 9, accent: [224, 188, 112] },
+  { at: 14, accent: [231, 156, 112] },
+  { at: 19, accent: [229, 138, 138] },
 ];
 
-function moodColor(value, key) {
+function stressAccent(value) {
   const upper = palette.findIndex(stop => stop.at >= value);
-  if (upper <= 0) return `rgb(${palette[0][key].join(', ')})`;
+  if (upper <= 0) return `rgb(${palette[0].accent.join(', ')})`;
   const low = palette[upper - 1];
   const high = palette[upper];
   const fraction = (value - low.at) / (high.at - low.at);
-  return `rgb(${low[key].map((channel, index) => Math.round(channel + (high[key][index] - channel) * fraction)).join(', ')})`;
+  return `rgb(${low.accent.map((channel, index) => Math.round(channel + (high.accent[index] - channel) * fraction)).join(', ')})`;
 }
 
 function renderSaveNote() {
@@ -144,9 +144,7 @@ function renderValue() {
   input.value = state.value;
   input.setAttribute('aria-valuetext', text.position(text[`zone${zone}`], state.value % 5 + 1));
   if (!drag) root.style.setProperty('--position', `${(state.value + .5) * 5}%`);
-  root.style.setProperty('--paper', moodColor(state.value, 'paper'));
-  root.style.setProperty('--accent', moodColor(state.value, 'accent'));
-  document.querySelector('meta[name="theme-color"]').content = moodColor(state.value, 'paper');
+  root.style.setProperty('--accent', stressAccent(state.value));
   for (const [index, button] of zoneButtons.entries()) {
     button.classList.toggle('selected', index === zone);
     button.setAttribute('aria-pressed', String(index === zone));
