@@ -71,7 +71,7 @@ h1 em { font-family: Georgia, "Times New Roman", serif; color: var(--accent); fo
 .divider-one { top: 25%; }
 .divider-two { top: 50%; }
 .divider-three { top: 75%; }
-.handle { position: absolute; z-index: 1; left: 74%; top: var(--position); width: 100px; height: 54px; display: flex; justify-content: center; align-items: center; gap: 6px; border: 1px solid #777; border-radius: 8px; transform: translate3d(-50%, -50%, 0); background: #242424; box-shadow: 0 4px 12px #0006; transition: top .12s cubic-bezier(.22, 1, .36, 1), box-shadow .15s; }
+.handle { position: absolute; z-index: 1; left: 74%; top: var(--position); width: 100px; height: 54px; display: flex; justify-content: center; align-items: center; gap: 6px; border: 1px solid var(--accent); border-radius: 8px; transform: translate3d(-50%, -50%, 0); background: #242424; box-shadow: 0 4px 12px #0006; transition: top .12s cubic-bezier(.22, 1, .36, 1), box-shadow .15s; }
 .handle span { display: block; width: 2px; height: 16px; border-radius: 2px; background: #ddd; }
 .gauge.dragging .handle { transition: box-shadow .15s; box-shadow: 0 2px 6px #0006; }
 .gauge-input { position: absolute; left: calc(74% - 60px); top: -28px; width: 120px; height: calc(100% + 56px); margin: 0; opacity: 0; cursor: grab; writing-mode: vertical-lr; direction: ltr; touch-action: none; }

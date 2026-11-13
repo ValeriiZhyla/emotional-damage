@@ -68,3 +68,18 @@ screenshots, CI and publication results are recorded on the fix PR.
 - Physical iPhone testing remains unavailable. Final CI and public deployment,
   readiness, browser persistence and resource observations are recorded on the
   theme PR.
+
+## 2026-11-13: Stress-colored handle outline
+
+- The handle's 1 px border shares the question's existing accent. Browser probes
+  in Chromium and mobile WebKit confirm matching colors at all twenty positions,
+  a fixed dark canvas/browser theme, and the retained white keyboard focus ring.
+  Chromium's forced-colors mode retains the system-color 2 px border.
+- Six focused checks pass in both engines: twenty-position dragging/persistence,
+  rapid direction changes, and WCAG A/AA checks at both extremes and in dialogs.
+  Green mobile and red desktop screenshots were inspected. Syntax, documentation
+  links and Compose/Caddy configuration validation also pass.
+- Offline shell advances to v5. A public WebKit profile from v4 is prepared with
+  a saved position, German and disabled haptics to check retention after release.
+  Final CI, public verification and health/resource results are recorded on the
+  outline PR. Physical-device testing remains unavailable.

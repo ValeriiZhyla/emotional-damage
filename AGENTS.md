@@ -33,8 +33,9 @@ Keep the tone personal and descriptive; this is not a diagnostic or advice tool.
 - Match the personal website's dark surfaces, thin gray borders and system
   typography. Keep the canvas and browser theme fixed at #101010 at every stress
   level, including with a light OS preference. Preserve the colored italic
-  emphasis in the question and readable stress accents; new background effects
-  remain proposals until selected by the user.
+  emphasis in the question and its matching thin handle outline. Keep stress
+  accents readable; new background effects remain proposals until selected by
+  the user.
 - During dragging, follow the latest pointer position once per display frame
   without position easing; preserve the initial contact offset on the handle.
   Keep saved/accessibility values discrete, and settle visually onto a tick on

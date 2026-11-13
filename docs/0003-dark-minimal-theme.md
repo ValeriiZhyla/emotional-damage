@@ -31,6 +31,8 @@ question and scale. Selecting a stress level changes existing accents and the
 selected label, without recoloring the page or browser chrome. Saved positions
 and preferences survive the release.
 
-Possible follow-ups are still proposed: color the handle's thin border, add a
-small halo behind it, or use a very faint edge tint. These additional effects are
-not implemented; the user will choose whether to add one.
+Follow-up selection (2026-11-13): the user accepted the recommended thin colored
+handle outline. Share the question's existing accent so both reflect the same
+selected position, from green through amber and orange to red. Keep the white
+keyboard focus ring and forced-colors override. Advance the offline shell to v5
+without changing browser-local state. A halo or edge tint remains proposed.
