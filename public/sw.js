@@ -1,4 +1,4 @@
-const CACHE = 'emotional-damage-shell-v2';
+const CACHE = 'emotional-damage-shell-v3';
 const SHELL = ['/', '/index.html', '/style.css', '/app.js', '/manifest.webmanifest', '/icons/icon.svg', '/icons/icon-192.png', '/icons/icon-512.png', '/icons/apple-touch-icon.png'];
 
 self.addEventListener('install', event => {

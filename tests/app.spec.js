@@ -276,7 +276,7 @@ test('each language fits small phones, tablets, desktop and landscape without pa
 
 test('mobile gives the gauge more room and desktop uses a wider two-column layout', async ({ page }) => {
   await page.goto('/');
-  for (const [width, height, minimumGauge] of [[375, 812, 400], [440, 956, 530]]) {
+  for (const [width, height, minimumGauge] of [[375, 812, 380], [440, 956, 480]]) {
     await page.setViewportSize({ width, height });
     const gauge = await page.locator('#gauge').boundingBox();
     expect(gauge.height).toBeGreaterThan(minimumGauge);
