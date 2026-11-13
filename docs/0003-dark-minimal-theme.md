@@ -36,3 +36,9 @@ handle outline. Share the question's existing accent so both reflect the same
 selected position, from green through amber and orange to red. Keep the white
 keyboard focus ring and forced-colors override. Advance the offline shell to v5
 without changing browser-local state. A halo or edge tint remains proposed.
+
+Color correction (2026-11-13): the user found the exhausted accents too orange.
+Start the red accent at position 15, the first Exhausted tick, and deepen it
+through position 19. Use #ff4d5a for the exhausted dot, info marker and skull.
+Keep the first three zones' accents and the entire gauge rail unchanged. Advance
+the offline shell to v6; retain the fixed dark canvas and existing saved state.

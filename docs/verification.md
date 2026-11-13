@@ -83,3 +83,21 @@ screenshots, CI and publication results are recorded on the fix PR.
   a saved position, German and disabled haptics to check retention after release.
   Final CI, public verification and health/resource results are recorded on the
   outline PR. Physical-device testing remains unavailable.
+
+## 2026-11-13: Exhausted accents use red throughout the zone
+
+- The first four Exhausted positions previously mixed orange into the accent.
+  Positions 15–19 now stay red, deepening toward the bottom, and the static
+  exhausted dot/info marker/skull share #ff4d5a.
+- Chromium and mobile WebKit probes compare all twenty positions against the
+  prior public version: the first fifteen accents and the whole gauge rail are
+  unchanged. The word and handle still match, with a fixed dark canvas/browser
+  theme. First/middle/last Exhausted screenshots were captured; mobile middle
+  and desktop bottom screenshots were inspected.
+- Four focused checks pass for twenty-position dragging/persistence and WCAG
+  A/AA at the gauge extremes and in both dialogs. The new red colors measure at
+  least 5.85:1 contrast against the canvas and 4.78:1 against the handle.
+- Syntax, documentation links and Compose/Caddy validation pass. Offline shell
+  advances to v6 without changing the localStorage schema. Final CI, public
+  persistence/offline verification and health/resource observations are recorded
+  on the color-fix PR. Physical-device testing remains unavailable.

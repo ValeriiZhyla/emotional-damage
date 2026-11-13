@@ -11,7 +11,7 @@
   --zone-0: #97c77b;
   --zone-1: #e0bc70;
   --zone-2: #e79c70;
-  --zone-3: #e58a8a;
+  --zone-3: #ff4d5a;
   -webkit-tap-highlight-color: transparent;
 }
 * { box-sizing: border-box; }
@@ -44,7 +44,7 @@ h1 em { font-family: Georgia, "Times New Roman", serif; color: var(--accent); fo
 .end-symbol svg { width: 43px; height: 39px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .heart { color: #97c77b; transform: rotate(-8deg); }
 .heart .sketch { opacity: .6; stroke-width: 1.3; }
-.skull { color: #e58a8a; transform: rotate(6deg); }
+.skull { color: var(--zone-3); transform: rotate(6deg); }
 .skull svg { height: 42px; }
 .skull ellipse { fill: currentColor; stroke: none; }
 .gauge { position: relative; flex: 1; min-height: 0; max-height: 58svh; margin-block: 10px; }
