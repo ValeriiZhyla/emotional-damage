@@ -30,6 +30,11 @@ Keep the tone personal and descriptive; this is not a diagnostic or advice tool.
   Hide haptic settings without support; respect reduced-motion preferences.
 - Support touch, pointer, keyboard and native slider accessibility. Good at the
   top; exhausted at the bottom. Keep 20 steps with five inside each zone.
+- Match the personal website's dark surfaces, thin gray borders and system
+  typography. Keep the canvas and browser theme fixed at #101010 at every stress
+  level, including with a light OS preference. Preserve the colored italic
+  emphasis in the question and readable stress accents; new background effects
+  remain proposals until selected by the user.
 - During dragging, follow the latest pointer position once per display frame
   without position easing; preserve the initial contact offset on the handle.
   Keep saved/accessibility values discrete, and settle visually onto a tick on

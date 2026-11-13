@@ -52,3 +52,19 @@ at both extremes. Desktop and tablet spacing is unchanged. The rail gives up a
 little height to preserve this clearance; its mobile size check reflects that.
 Offline shell advances to v3 without changing saved state. Browser geometry,
 screenshots, CI and publication results are recorded on the fix PR.
+
+## 2026-11-13: Dark minimal theme
+
+- Matched the personal homepage's dark palette, thin borders, system headings
+  and neutral controls, retaining the colored italic question emphasis.
+- Focused Chromium and mobile WebKit checks passed for offline reload, all three
+  languages across nine viewport sizes, responsive geometry, and automated WCAG
+  checks at both gauge extremes and in both dialogs (eight checks total).
+- The page, browser theme and manifest use #101010. A browser probe checks all
+  twenty positions with a light OS preference: only the existing accent changes.
+  Mobile/desktop main screens and dialogs are inspected as screenshots.
+- Home-screen PNG icons are rasterized from the local SVG. Offline shell v4
+  retains the existing localStorage key and schema. No server settings change.
+- Physical iPhone testing remains unavailable. Final CI and public deployment,
+  readiness, browser persistence and resource observations are recorded on the
+  theme PR.
