@@ -122,3 +122,22 @@ screenshots, CI and publication results are recorded on the fix PR.
   haptics disabled is prepared for post-release retention checks. Final CI,
   public persistence/offline verification and health/resources are recorded on
   the release PR. Physical-device testing remains unavailable.
+
+## 2026-11-14: Slider focus follows the input method
+
+- Reproduced the sticky white handle outline in Chromium and mobile WebKit after
+  pointer focus. Document-level input-method listeners now suppress only this
+  ring after mouse/touch/pen use, including taps outside the slider. Keyboard
+  input restores the native focus-visible treatment without blurring the slider.
+- A regression test covers Tab navigation, mouse/mobile touch, outside clicks,
+  keyboard resumption and value changes. It checks rendered outline style rather
+  than the browser's unused default outline width. Both engines pass.
+- Existing focused checks pass for keyboard values/accessibility, fast reversals,
+  native touch cancellation and WCAG A/AA; one platform-specific touch check is
+  intentionally skipped. Mobile pointer and desktop keyboard screenshots were
+  inspected. Syntax, documentation links and Compose/Caddy validation pass.
+- Offline shell advances to v8; the saved-state schema and visuals are unchanged.
+  A pre-release v7 WebKit profile with Russian, value 7 and disabled haptics is
+  prepared for public retention checks. Full CI, public pointer/keyboard and
+  offline checks, and health/resources are recorded on the fix PR. Physical
+  iPhone testing remains unavailable.

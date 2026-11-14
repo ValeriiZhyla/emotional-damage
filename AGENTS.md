@@ -30,6 +30,9 @@ Keep the tone personal and descriptive; this is not a diagnostic or advice tool.
   Hide haptic settings without support; respect reduced-motion preferences.
 - Support touch, pointer, keyboard and native slider accessibility. Good at the
   top; exhausted at the bottom. Keep 20 steps with five inside each zone.
+- Keep the slider's visible focus ring for keyboard input. Pointer interactions
+  anywhere on the page hide that ring without blurring or disabling the slider;
+  keyboard navigation restores it. Other controls keep native focus styling.
 - Match the personal website's dark surfaces, thin gray borders and system
   typography. Keep the base canvas and browser theme fixed at #101010 at every
   stress level, including with a light OS preference. The accepted ambient glow

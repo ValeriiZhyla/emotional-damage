@@ -208,6 +208,11 @@ function finishDrag(event) {
   if (input.hasPointerCapture(pointerId)) input.releasePointerCapture(pointerId);
 }
 
+// Programmatic range focus can retain :focus-visible after touch or mouse use.
+// Hide only the handle's ring for pointer input, keeping native focus intact.
+document.addEventListener('pointerdown', () => gauge.classList.add('pointer-input'), { capture: true });
+document.addEventListener('keydown', () => gauge.classList.remove('pointer-input'), { capture: true });
+
 input.addEventListener('pointerdown', event => {
   if (drag || !event.isPrimary || (event.pointerType === 'mouse' && event.button !== 0)) return;
   event.preventDefault();
