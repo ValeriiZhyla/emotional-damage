@@ -49,6 +49,10 @@ in sync with translations; see decision 0005 for the copy conventions and source
   without position easing; preserve the initial contact offset on the handle.
   Keep saved/accessibility values discrete, and settle visually onto a tick on
   release/cancellation. Cancel pending frames when a gesture ends.
+- Consume touch panning only on the slider during an active drag. The optional
+  Telegram browser gesture-cancellation bridge must tolerate absence or failure;
+  keep dialogs and touches elsewhere native. Do not load a Telegram SDK or treat
+  this ordinary website as a Mini App. See decision 0006 for host limitations.
 - Mobile uses the available viewport height for a larger gauge. At widths of
   900px and heights above 570px, use a wide two-column desktop layout; short
   landscape screens have a compact two-column layout from 600px width.

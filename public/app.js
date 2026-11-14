@@ -238,6 +238,18 @@ input.addEventListener('pointermove', event => {
     renderDrag(pendingDragY);
   });
 });
+// A containing iOS browser sheet can pan independently of CSS touch-action.
+// Consume only slider touches; dialogs and gestures elsewhere stay native.
+input.addEventListener('touchmove', event => {
+  if (!drag) return;
+  if (event.cancelable) event.preventDefault();
+  try {
+    // Telegram's ordinary in-app browser uses this event for draggable content.
+    // The optional, undocumented bridge may be absent or change between versions.
+    const bridge = window.TelegramWebviewProxy;
+    if (typeof bridge?.postEvent === 'function') bridge.postEvent('cancellingTouch', '{}');
+  } catch { /* Host integration must never interrupt the gauge. */ }
+}, { passive: false });
 for (const eventName of ['pointerup', 'pointercancel', 'lostpointercapture']) {
   input.addEventListener(eventName, finishDrag);
 }

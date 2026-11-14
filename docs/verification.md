@@ -163,3 +163,24 @@ screenshots, CI and publication results are recorded on the fix PR.
   saved-state schema, gauge behavior and styles are unchanged. Final CI, public
   verification, persistence and health/resource observations are recorded on the
   copy PR. No human native-speaker or physical-device review is claimed.
+
+## 2026-11-14: Embedded browser gesture conflict
+
+- The reported Telegram/iPhone overlay conflict is investigated against pinned
+  Telegram iOS source (decision 0006). An active slider drag now consumes touch
+  panning and uses the host's optional gesture-cancellation event. No document-wide
+  lock, SDK, browser sniffing, visual change or saved-state migration is added.
+- The full local run passes all 42 existing browser checks, with two intended
+  platform skips. The enhanced native Chromium swipe check confirms touch moves
+  are consumed and host cancellation is requested, alongside fast reversals,
+  touch cancellation and zero page scrolling.
+- A new cross-engine regression covers active versus inactive drags, cancelable
+  versus noncancelable events, untouched dialog gestures, absent/throwing bridges
+  and continued value saving. Its initial WebKit harness used a non-constructible
+  Touch interface; after using DOM event propagation instead, the regression
+  passes in both engines. This does not emulate Telegram's native overlay.
+- Syntax, documentation links and Compose/Caddy configuration are validated.
+  Offline shell advances to v10. A public v9 WebKit profile with German, value 9
+  and disabled haptics is prepared for release retention checks. Final exact-head
+  review, full CI, public browser/offline checks and health/resources are recorded
+  on the fix PR. Physical iPhone/Telegram confirmation remains unavailable.
