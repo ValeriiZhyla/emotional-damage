@@ -2,6 +2,7 @@
 
 - Status: Accepted
 - Date: 2026-11-13
+- Amended by: [0004: Ambient stress feedback](0004-ambient-stress-feedback.md)
 
 ## Context
 
