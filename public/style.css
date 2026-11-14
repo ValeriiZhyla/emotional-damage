@@ -33,7 +33,6 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .icon-button:hover { background: #202020; border-color: #969696; }
 .icon-button:active { transform: scale(.94); }
 .icon-button svg { width: 23px; height: 23px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
-.slider-cut { stroke: var(--paper); stroke-width: 5; }
 .wordmark { font-size: 12px; font-weight: 750; line-height: 1.05; letter-spacing: -.04em; }
 .wordmark-dot { color: var(--accent); }
 .toolbar-actions { margin-left: auto; display: flex; gap: 8px; }
@@ -138,6 +137,8 @@ h1 em { font-family: Georgia, "Times New Roman", serif; color: var(--accent); fo
   h1 { font-size: clamp(52px, 5vw, 72px); margin-top: 22px; }
   .instrument { grid-column: 2; grid-row: 1 / 3; align-self: stretch; margin-top: 0; }
   .gauge { max-height: 62svh; margin-block: 16px; }
+  /* Keep desktop light local and diffuse; retain the broader mobile treatment. */
+  .gauge::before { width: clamp(480px, 52vw, 760px); height: clamp(360px, 70svh, 720px); filter: blur(28px); background: radial-gradient(ellipse, color-mix(in srgb, var(--accent) 14%, transparent) 0%, color-mix(in srgb, var(--accent) 13%, transparent) 15%, color-mix(in srgb, var(--accent) 10%, transparent) 30%, color-mix(in srgb, var(--accent) 6%, transparent) 45%, color-mix(in srgb, var(--accent) 3%, transparent) 60%, color-mix(in srgb, var(--accent) 1%, transparent) 75%, transparent 90%); }
   .end-symbol { height: 48px; }
   .end-symbol svg { width: 50px; height: 46px; }
   .zone { gap: 12px; }

@@ -44,8 +44,12 @@ in sync with translations; see decision 0005 for the copy conventions and source
   typography. Keep the base canvas and browser theme fixed at #101010 at every
   stress level, including with a light OS preference. The accepted ambient glow
   shares the handle's position and accent, with a lightly tinted handle face,
-  colored active label/dot and quieter inactive endpoint illustrations. Preserve
-  the palette and colored italic question. No autonomous animation; keep contrast,
+  colored active label/dot and quieter inactive endpoint illustrations. Retain the
+  broad mobile glow; desktop uses a smaller, quieter feathered light. Blend warm
+  tones gradually into red through Overloaded; all Exhausted ticks stay red.
+  During dragging, interpolate the accent continuously while saved values stay
+  discrete. Preserve the colored italic question. See decision 0010.
+  No autonomous animation; keep contrast,
   reduced-motion and forced-colors support, and contain decorative overflow.
 - During dragging, follow the latest pointer position once per display frame
   without position easing; preserve the initial contact offset on the handle.

@@ -3,6 +3,7 @@
 - Status: Accepted
 - Date: 2026-11-14
 - Amends: [0003: Dark minimal theme](0003-dark-minimal-theme.md)
+- Desktop light sizing/falloff amended by [0010: Refined glow and colour progression](0010-refined-glow-and-colour-progression.md).
 
 ## Context
 

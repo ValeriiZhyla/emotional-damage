@@ -254,3 +254,30 @@ screenshots, CI and publication results are recorded on the fix PR.
   the grab offset; both focused and full local runs pass. Final exact-head review,
   CI, public startup/gesture/offline checks, old-profile retention and health are
   recorded on the combined update PR before deployment.
+
+## 2026-11-14: Desktop light, gradual red and Settings gear
+
+- Kept the mobile light treatment and scoped a smaller, quieter feathered glow
+  to the existing desktop breakpoint. Replaced the Settings sliders with an
+  inline gear using the same button, stroke and accessible labels. Decision 0010
+  amends the earlier desktop glow decision; the offline shell advances to v13.
+- Removed the last-orange anchor so Overloaded blends into red across five
+  changed ticks (10–14). Earlier colours and all five Exhausted reds are unchanged.
+  Visual colour now follows the fractional drag position while saved/accessibility
+  values remain discrete. Release restores the tick's corresponding accent.
+- Eight focused Chromium/mobile WebKit checks pass for colour continuity,
+  within-tick response, matching question/handle/label accents, saved values,
+  startup, fast reversals and automated accessibility. Eight additional WCAG A/AA
+  scans pass at the new interior colours on mobile and desktop in both engines.
+  Probes confirm only ticks 10–14 change, reduced-motion behavior, desktop-only
+  blur and Chromium forced-colors fallback.
+- Before/after screenshots cover 1440×900 green, near-boundary and bottom red,
+  1920×1080 red and 440×956 mobile green/red. Mobile instrument screenshots at
+  values 2 and 19 have identical PNG pixels and computed light styles. Desktop
+  near-boundary/red and mobile green screenshots are inspected, including the
+  new gear. No horizontal overflow occurs in these captures.
+- Syntax, whitespace, documentation links and Compose/Caddy configuration are
+  checked. A pre-release v12 mobile WebKit profile with German, value 14 and
+  disabled haptics is prepared. Final full local/CI results, exact-head review,
+  public colour/gesture/startup/offline checks, retention and health/resource
+  observations are recorded on the PR before/after deployment as appropriate.
