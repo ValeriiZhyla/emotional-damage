@@ -101,3 +101,24 @@ screenshots, CI and publication results are recorded on the fix PR.
   advances to v6 without changing the localStorage schema. Final CI, public
   persistence/offline verification and health/resource observations are recorded
   on the color-fix PR. Physical-device testing remains unavailable.
+
+## 2026-11-14: Ambient stress feedback
+
+- Implemented the accepted glow, handle tint, colored selected label/dot and
+  dimmed inactive endpoint illustrations through CSS. The existing palette,
+  rail, responsive geometry, script and saved-state schema are unchanged.
+- Eight focused Chromium/WebKit checks cover rapid dragging, multilingual
+  viewport fit, desktop/mobile geometry and WCAG A/AA. An initial decorative
+  overflow at phone widths was resolved with viewport paint containment; the
+  affected six checks pass on the final styles. The two unchanged geometry
+  checks reuse their prior passing result.
+- Manual probes check all twenty positions in both engines: glow/handle position,
+  matching label accents, endpoint emphasis, dark base/browser theme, no overflow
+  or page errors, and forced-colors fallback. Green desktop, red mobile and mobile
+  info screenshots were inspected. Additional probes cover default-motion quick
+  reversals/idle stillness and a short Russian dialog's scrollable footnote.
+- Syntax, documentation links and Compose/Caddy validation pass. Offline shell
+  advances to v7. A pre-release v6 WebKit profile with German, position 14 and
+  haptics disabled is prepared for post-release retention checks. Final CI,
+  public persistence/offline verification and health/resources are recorded on
+  the release PR. Physical-device testing remains unavailable.
