@@ -230,3 +230,27 @@ screenshots, CI and publication results are recorded on the fix PR.
   v11 mobile WebKit profile with Russian, position 18 and disabled haptics is
   prepared for public retention verification. Exact-head review, final full CI,
   public/offline/persistence checks and health/resources are recorded on the PR.
+
+## 2026-11-14: Restore saved appearance before first reveal
+
+- A same-origin blocking boot script marks startup before body/styles paint.
+  The module validates saved state, renders position, accent, selected level and
+  language, resolves layout with transitions disabled, then reveals the app.
+  Normal interactive motion remains available; no spinner, fade or timer is added.
+  Decision 0009 documents the startup contract. The v12 offline shell and public
+  asset verification include boot.js.
+- The full updated local suite passes 53 checks with three intentional platform
+  skips. New Chromium/mobile WebKit tests delay the module response, verify that
+  default UI stays hidden, then inspect the first visible animation frames across
+  four red/green openings and reloads. Position, accent, level, Russian locale and
+  zero startup animations match the restored state. Offline reload, malformed or
+  blocked storage, gestures, responsive dialogs and accessibility also pass.
+- Manual checks in both engines confirm that disabling JavaScript still shows
+  the static page, noscript explanation and Back link. Syntax, whitespace,
+  relative documentation links and Compose/Caddy validation pass.
+- The earlier gesture PR head's CI caught a timing problem in its new test: the
+  second viewport sampled handle bounds during an intentional zone-button
+  transition. The test now waits for that transition to finish before measuring
+  the grab offset; both focused and full local runs pass. Final exact-head review,
+  CI, public startup/gesture/offline checks, old-profile retention and health are
+  recorded on the combined update PR before deployment.

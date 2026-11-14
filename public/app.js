@@ -305,6 +305,9 @@ window.addEventListener('storage', event => {
 readState();
 hapticsInput.checked = state.haptics;
 renderLanguage();
+// Settle saved styles with startup transitions disabled before revealing the UI.
+handle.getBoundingClientRect();
+root.classList.remove('starting');
 
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/sw.js').catch(() => { /* The gauge works without offline installation. */ });

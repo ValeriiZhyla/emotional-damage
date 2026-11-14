@@ -15,6 +15,8 @@
   -webkit-tap-highlight-color: transparent;
 }
 * { box-sizing: border-box; }
+.starting .app { visibility: hidden; }
+.starting *, .starting *::before, .starting *::after { transition: none !important; animation: none !important; }
 /* Keep the decorative light inside the viewport's painted area. */
 body { margin: 0; background: var(--paper); overflow: clip; contain: paint; }
 button, input, a { touch-action: manipulation; }

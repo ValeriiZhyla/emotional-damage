@@ -14,8 +14,10 @@ in sync with translations; see decision 0005 for the copy conventions and source
 
 ## Structure
 
-- `public/`: buildless, dependency-free browser app. `app.js` owns translations,
-  gauge input, optional haptics, dialogs and validated browser-local persistence.
+- `public/`: buildless, dependency-free browser app. Blocking `boot.js` marks the
+  startup phase before styles/body paint; `app.js` restores and reveals the UI.
+  It owns translations, gauge input, optional haptics, dialogs and validated
+  browser-local persistence.
 - `public/sw.js`: offline shell only. Bump its cache version whenever cached
   assets change. Never cache unrelated paths or user data.
 - `public/icons/`: code-native SVG and rasterized home-screen icons.
@@ -67,6 +69,11 @@ in sync with translations; see decision 0005 for the copy conventions and source
   Escape and focus restoration. See decision 0007 for the compact dialog layout.
 - Save on movement; tolerate blocked storage and malformed stored values. Keep
   manual language preference, with browser language used only as the default.
+- First reveal must already match restored position, accent, selected level and
+  locale. Suppress transitions during startup and flush restored layout before
+  revealing the app; keep normal movement transitions afterward. Cache boot.js
+  with the offline shell. Without JavaScript, retain the static/noscript fallback.
+  See decision 0009.
 - Preserve administrator access and other applications. The shared ingress in
   `../personal-infra/` owns TLS and the homepage. Read its `AGENTS.md` before edits.
 - No persistent server volume is needed: state belongs to each browser/device.

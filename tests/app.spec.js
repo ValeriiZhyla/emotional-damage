@@ -8,6 +8,60 @@ const titles = {
   ru: ['Хорошо', 'Усталость', 'Перегрузка', 'Истощение'],
 };
 
+test.describe('saved appearance on opening', () => {
+  test.use({ serviceWorkers: 'block' }); // Gate the actual module request on every reload.
+  test('slow loading and repeated reloads never reveal the default state or a startup transition', async ({ page }) => {
+    await page.addInitScript(key => {
+      if (!localStorage.getItem(key)) localStorage.setItem(key, JSON.stringify({ version: 1, value: 19, language: 'ru', haptics: false }));
+      window.visibleFrames = [];
+      function frame() {
+        const app = document.querySelector('.app');
+        const handle = document.querySelector('#handle');
+        const gauge = document.querySelector('#gauge');
+        if (app && handle && gauge && document.styleSheets.length && getComputedStyle(app).visibility === 'visible') {
+          const grip = handle.getBoundingClientRect();
+          const bounds = gauge.getBoundingClientRect();
+          window.visibleFrames.push({
+            value: document.querySelector('#stress').value,
+            language: document.documentElement.lang,
+            zone: document.querySelector('.zone.selected').dataset.zone,
+            color: getComputedStyle(document.querySelector('h1 em')).color,
+            fraction: (grip.y + grip.height / 2 - bounds.y) / bounds.height,
+            animations: document.getAnimations().filter(animation => animation.playState !== 'finished').length,
+          });
+        }
+        if (window.visibleFrames.length < 8) requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+    }, KEY);
+    let release;
+    let gate;
+    await page.route('**/app.js', async route => { await gate; await route.continue(); });
+    for (const value of [19, 19, 0, 19]) {
+      if (page.url() !== 'about:blank') await page.locator('#stress').press(value === 0 ? 'Home' : 'End');
+      gate = new Promise(resolve => { release = resolve; });
+      await page.goto('/', { waitUntil: 'commit' });
+      await page.locator('.app').waitFor({ state: 'attached' });
+      await expect(page.locator('html')).toHaveClass('starting');
+      await expect(page.locator('.app')).toHaveCSS('visibility', 'hidden');
+      await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+      expect(await page.evaluate(() => window.visibleFrames)).toEqual([]);
+      release();
+      await expect(page.locator('#stress')).toHaveValue(String(value));
+      await expect(page.locator('.app')).toHaveCSS('visibility', 'visible');
+      await page.waitForFunction(() => window.visibleFrames.length >= 2);
+      for (const frame of await page.evaluate(() => window.visibleFrames)) {
+        expect(frame.value).toBe(String(value));
+        expect(frame.zone).toBe(String(Math.floor(value / 5)));
+        expect(frame.language).toBe('ru');
+        expect(frame.color).toBe(value === 19 ? 'rgb(255, 77, 90)' : 'rgb(151, 199, 123)');
+        expect(Math.abs(frame.fraction - (value + .5) / 20)).toBeLessThan(.002);
+        expect(frame.animations).toBe(0);
+      }
+    }
+  });
+});
+
 test('all 20 pointer positions select the correct zone and survive a new page', async ({ page, context }) => {
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
@@ -198,6 +252,7 @@ test('near misses outside the old input grab the gauge without an initial jump',
     await page.setViewportSize(viewport);
     await page.goto('/');
     await page.locator('.zone[data-zone="0"] .zone-title').click();
+    await page.locator('#handle').evaluate(el => Promise.all(el.getAnimations().map(animation => animation.finished)));
     const gauge = await page.locator('#gauge').boundingBox();
     const input = await page.locator('#stress').boundingBox();
     const grip = await page.locator('#handle').boundingBox();
