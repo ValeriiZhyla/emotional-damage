@@ -78,25 +78,25 @@
   </div>
 
   <dialog class="sheet" id="info-dialog" aria-labelledby="info-title">
-    <div class="sheet-header"><p class="eyebrow" data-i18n="aboutEyebrow">A MOMENT TO PAUSE</p><button class="icon-button close-dialog" type="button" aria-label="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div>
-    <h2 id="info-title" data-i18n="infoTitle">How it works</h2>
-    <p class="sheet-intro" data-i18n="infoIntro">Move the marker to match how you feel. There’s no right answer, and you don’t need to change anything.</p>
+    <div class="sheet-header"><h2 id="info-title" data-i18n="infoTitle" tabindex="-1" autofocus>How it works</h2><button class="icon-button close-dialog" type="button" aria-label="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div>
+    <p class="sheet-intro" data-i18n="infoIntro">Move the marker to match how you feel. There’s no right answer.</p>
     <div class="level-guide">
-      <section><h3><span class="guide-dot dot-0"></span><span data-i18n="zone0">Okay</span></h3><p data-i18n="description0">You have energy for everyday things. You can focus, spend time with others, and do things you enjoy.</p></section>
-      <section><h3><span class="guide-dot dot-1"></span><span data-i18n="zone1">Tired</span></h3><p data-i18n="description1">Focusing takes more effort. You’d like to be done for the day, but still feel like doing something you enjoy.</p></section>
-      <section><h3><span class="guide-dot dot-2"></span><span data-i18n="zone2">Overloaded</span></h3><p data-i18n="description2">Everything feels like another demand. You’re easily irritated, thoughts of unfinished tasks keep coming back, and socializing takes effort.</p></section>
-      <section><h3><span class="guide-dot dot-3"></span><span data-i18n="zone3">Exhausted</span></h3><p data-i18n="description3">Even things you enjoy feel draining. Small tasks take a lot of effort, and you may just want to be left alone.</p></section>
+      <section><h3><span class="guide-dot dot-0"></span><span data-i18n="zone0">Okay</span></h3><p data-i18n="description0">You have energy, can focus, and enjoy spending time with others.</p></section>
+      <section><h3><span class="guide-dot dot-1"></span><span data-i18n="zone1">Tired</span></h3><p data-i18n="description1">Focusing takes effort. You want to finish for the day, but still enjoy other things.</p></section>
+      <section><h3><span class="guide-dot dot-2"></span><span data-i18n="zone2">Overloaded</span></h3><p data-i18n="description2">Small things irritate you. Tasks stay on your mind, and socializing feels like work.</p></section>
+      <section><h3><span class="guide-dot dot-3"></span><span data-i18n="zone3">Exhausted</span></h3><p data-i18n="description3">Even things you enjoy feel draining. Small tasks take effort; you may want to be alone.</p></section>
     </div>
-    <p class="sheet-footnote" data-i18n="infoFootnote">A fidget for reflection, not a test or medical advice. The descriptions are just a rough guide.</p>
+    <p class="sheet-footnote" data-i18n="infoFootnote">The descriptions are a rough guide, not a test or medical advice.</p>
   </dialog>
 
   <dialog class="sheet" id="settings-dialog" aria-labelledby="settings-title">
-    <div class="sheet-header"><p class="eyebrow" data-i18n="settingsEyebrow">MAKE IT YOURS</p><button class="icon-button close-dialog" type="button" aria-label="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div>
-    <h2 id="settings-title" data-i18n="settingsTitle">Settings</h2>
+    <div class="sheet-header"><h2 id="settings-title" data-i18n="settingsTitle" tabindex="-1" autofocus>Settings</h2><button class="icon-button close-dialog" type="button" aria-label="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div>
     <fieldset class="language-options"><legend data-i18n="languageLabel">Language</legend>
-      <label><input type="radio" name="language" value="en" checked><span lang="en">English</span><span class="language-check" aria-hidden="true">✓</span></label>
-      <label><input type="radio" name="language" value="de"><span lang="de">Deutsch</span><span class="language-check" aria-hidden="true">✓</span></label>
-      <label><input type="radio" name="language" value="ru"><span lang="ru">Русский</span><span class="language-check" aria-hidden="true">✓</span></label>
+      <div class="language-choices">
+        <label><input type="radio" name="language" value="en" checked><span lang="en">English</span></label>
+        <label><input type="radio" name="language" value="de"><span lang="de">Deutsch</span></label>
+        <label><input type="radio" name="language" value="ru"><span lang="ru">Русский</span></label>
+      </div>
     </fieldset>
     <label class="haptics-option" id="haptics-option" hidden><span><span class="preference-label" data-i18n="hapticsLabel">Haptic feedback</span><span class="preference-caption" data-i18n="hapticsCaption">A light vibration as you move the marker.</span></span><input type="checkbox" id="haptics" role="switch" checked></label>
     <p class="privacy-note" data-i18n="privacyNote">Your last position and settings are saved only in this browser on this device. No account or tracking.</p>

@@ -391,11 +391,74 @@ test('mobile gives the gauge more room and desktop uses a wider two-column layou
   expect((await page.locator('#gauge').boundingBox()).height).toBeGreaterThan(500);
 });
 
+test('both dialogs are centered and fit phone browser heights in every language', async ({ page }) => {
+  await page.addInitScript(() => Object.defineProperty(navigator, 'vibrate', { value: () => true, configurable: true }));
+  await page.goto('/');
+  for (const language of ['en', 'de', 'ru']) {
+    await page.locator('#open-settings').click();
+    await page.locator(`.language-options label:has(input[value="${language}"])`).click();
+    await page.locator('#settings-dialog .close-dialog').click();
+    for (const [width, height] of [[375, 640], [440, 740], [1440, 900]]) {
+      await page.setViewportSize({ width, height });
+      for (const name of ['info', 'settings']) {
+        await page.locator(`#open-${name}`).click();
+        const dialog = page.locator(`#${name}-dialog`);
+        const bounds = await dialog.boundingBox();
+        expect(Math.abs(bounds.y + bounds.height / 2 - height / 2), `${language} ${name} center`).toBeLessThan(1);
+        expect(bounds.y).toBeGreaterThanOrEqual(19);
+        expect(bounds.y + bounds.height).toBeLessThanOrEqual(height - 19);
+        expect(await dialog.evaluate(el => el.scrollHeight <= el.clientHeight + 1), `${language} ${name} vertical fit at ${width}x${height}`).toBe(true);
+        expect(await dialog.evaluate(el => el.scrollWidth <= el.clientWidth + 1)).toBe(true);
+        await expect(page.locator(`#${name}-title`)).toBeFocused();
+        await expect(dialog.locator(`[data-i18n="${name === 'info' ? 'infoFootnote' : 'installNote'}"]`)).toBeInViewport({ ratio: 1 });
+        if (name === 'settings') {
+          await expect(page.locator('#haptics-option')).toBeVisible();
+          const choices = await Promise.all((await dialog.locator('.language-options label').all()).map(label => label.boundingBox()));
+          expect(choices.every(choice => Math.abs(choice.y - choices[0].y) < 1 && choice.height >= 44)).toBe(true);
+        }
+        await dialog.locator('.close-dialog').click();
+      }
+    }
+  }
+});
+
+test('short screens and doubled dialog text keep all content reachable', async ({ page }) => {
+  await page.addInitScript(() => Object.defineProperty(navigator, 'vibrate', { value: () => true, configurable: true }));
+  await page.setViewportSize({ width: 320, height: 480 });
+  await page.goto('/');
+  await page.locator('#open-settings').click();
+  await page.locator('.language-options label:has(input[value="de"])').click();
+  await page.locator('#settings-dialog .close-dialog').click();
+  // Emulate enlarged text independently of viewport zoom and preserve controls.
+  await page.evaluate(() => {
+    const sizes = [...document.querySelectorAll('.sheet h2, .sheet h3, .sheet p, .sheet legend, .language-choices, .preference-label, .preference-caption')]
+      .map(el => [el, parseFloat(getComputedStyle(el).fontSize)]);
+    for (const [element, size] of sizes) element.style.fontSize = `${size * 2}px`;
+  });
+  for (const name of ['info', 'settings']) {
+    await page.locator(`#open-${name}`).click();
+    const dialog = page.locator(`#${name}-dialog`);
+    expect(await dialog.evaluate(el => el.scrollHeight > el.clientHeight)).toBe(true);
+    expect(await dialog.evaluate(el => el.scrollWidth <= el.clientWidth + 1)).toBe(true);
+    const last = dialog.locator(`[data-i18n="${name === 'info' ? 'infoFootnote' : 'installNote'}"]`);
+    await last.scrollIntoViewIfNeeded();
+    await expect(last).toBeInViewport({ ratio: 1 });
+    await page.locator(`#${name}-title`).scrollIntoViewIfNeeded();
+    await expect(dialog.locator('.close-dialog')).toBeInViewport({ ratio: 1 });
+    await page.keyboard.press('Escape');
+    await expect(dialog).not.toBeVisible();
+    await expect(page.locator(`#open-${name}`)).toBeFocused();
+  }
+});
+
 test('modals close with Escape, restore focus and respect reduced motion', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/');
   await page.locator('#open-info').click();
   await expect(page.locator('#info-dialog')).toBeVisible();
+  await expect(page.locator('#info-title')).toBeFocused();
+  await page.keyboard.press('Tab');
+  await expect(page.locator('#info-dialog .close-dialog')).toBeFocused();
   await page.keyboard.press('Escape');
   await expect(page.locator('#info-dialog')).not.toBeVisible();
   await expect(page.locator('#open-info')).toBeFocused();

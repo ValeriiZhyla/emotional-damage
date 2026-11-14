@@ -184,3 +184,25 @@ screenshots, CI and publication results are recorded on the fix PR.
   and disabled haptics is prepared for release retention checks. Final exact-head
   review, full CI, public browser/offline checks and health/resources are recorded
   on the fix PR. Physical iPhone/Telegram confirmation remains unavailable.
+
+## 2026-11-14: Centered compact Info and Settings
+
+- Replaced the bottom-aligned mobile sheets with centered, content-sized native
+  dialogs. Titles and 44px close buttons share a row; redundant eyebrows are
+  removed. Languages use a compact radio row that can wrap with enlarged text.
+  Info copy is shorter in EN/DE/RU, while secondary text grows to 12px.
+- The full local suite passes 48 checks with two intentional platform skips.
+  New regression checks cover both dialogs in all three locales at 375×640,
+  440×740 and 1440×900, including visible haptic controls: centered bounds, no
+  internal scrolling, complete footnotes and one-row language choices. Header
+  focus, Tab to Close, Escape, reduced motion and focus restoration also pass.
+- A 320×480/doubled-text check confirms usable overflow, no horizontal clipping,
+  access to the last paragraph and close control. Twelve additional WCAG A/AA
+  scans pass across both dialogs, all locales and both engines at 375×640.
+  Russian mobile Info/Settings and German desktop Info screenshots are inspected.
+- Syntax, locale keys, English HTML fallbacks, unchanged procedural app behavior,
+  documentation links and Compose/Caddy configuration are checked. Offline shell
+  advances to v11. A public v10 mobile WebKit profile with Russian, position 16
+  and disabled haptics is prepared for retention verification. Full CI and public
+  layout/offline/persistence/health results are recorded on the PR. Physical
+  iPhone/browser-chrome verification is unavailable.

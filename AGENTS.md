@@ -56,6 +56,11 @@ in sync with translations; see decision 0005 for the copy conventions and source
 - Mobile uses the available viewport height for a larger gauge. At widths of
   900px and heights above 570px, use a wide two-column desktop layout; short
   landscape screens have a compact two-column layout from 600px width.
+- Info and Settings are centered native dialogs with content-driven heights.
+  Fit normal phone browser heights in all locales, including supported haptics;
+  keep overflow available for short screens or enlarged text rather than clipping
+  content. Focus the heading on opening and preserve keyboard control outlines,
+  Escape and focus restoration. See decision 0007 for the compact dialog layout.
 - Save on movement; tolerate blocked storage and malformed stored values. Keep
   manual language preference, with browser language used only as the default.
 - Preserve administrator access and other applications. The shared ingress in
