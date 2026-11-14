@@ -2,7 +2,7 @@
   "id": "/",
   "name": "Emotional Damage",
   "short_name": "Emotional Damage",
-  "description": "A little space to notice how you feel.",
+  "description": "A simple gauge to check in with yourself.",
   "lang": "en",
   "start_url": "/",
   "scope": "/",

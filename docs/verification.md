@@ -141,3 +141,25 @@ screenshots, CI and publication results are recorded on the fix PR.
   prepared for public retention checks. Full CI, public pointer/keyboard and
   offline checks, and health/resources are recorded on the fix PR. Physical
   iPhone testing remains unavailable.
+
+## 2026-11-14: English, German and Russian copy review
+
+- Reviewed all 37 locale keys in each language: main-screen labels and captions,
+  guidance, settings, accessible labels, storage messages and installation hints.
+  Replaced literal translations and vague metaphors with concise everyday copy.
+  Current iPhone/Safari action names are checked against Apple's localized guides
+  linked in decision 0005. Initial English HTML and app descriptions are updated.
+- The full local Chromium/mobile WebKit suite passes 42 checks with two intentional
+  platform skips. Later heading/English description polish is checked by manual
+  browser probes; the full suite is also required in CI on the final PR head.
+- Additional probes in both engines cover all languages at 320×568, 440×956 and
+  1440×900, both dialogs including supported haptic settings, 18 WCAG A/AA scans,
+  language persistence, localized offline reload and blocked storage on small
+  screens. English HTML fallbacks match the catalog. A long German info heading
+  was shortened for narrow screens. Main screen and dialog screenshots are
+  inspected; no page errors or horizontal text overflow remain.
+- Offline shell advances to v9. A public v8 WebKit profile with Russian, value 18
+  and haptics disabled is prepared for post-release retention verification. The
+  saved-state schema, gauge behavior and styles are unchanged. Final CI, public
+  verification, persistence and health/resource observations are recorded on the
+  copy PR. No human native-speaker or physical-device review is claimed.
