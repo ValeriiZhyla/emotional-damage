@@ -206,3 +206,51 @@ screenshots, CI and publication results are recorded on the fix PR.
   and disabled haptics is prepared for retention verification. Full CI and public
   layout/offline/persistence/health results are recorded on the PR. Physical
   iPhone/browser-chrome verification is unavailable.
+
+## 2026-11-14: Forgiving gauge touch area
+
+- Expanded touch protection from the narrow input to the whole instrument,
+  including blank space and endpoint drawings. Default cancellation and the
+  optional Telegram cancellation request begin at touchstart. Level-button taps
+  remain native; swipes over them are consumed. Dialogs and the rest of the page
+  keep their native gestures. Decision 0008 updates the earlier scope in 0006.
+- Blank space can begin a captured range drag. A 24px margin around the handle
+  preserves the initial grab offset. The full local Chromium/mobile WebKit suite
+  passes 51 checks with three intentional platform skips, including near misses
+  at phone/desktop sizes, resize cleanup, native mobile taps, level buttons,
+  keyboard focus, persistence, offline, responsive dialogs and WCAG A/AA checks.
+- An enhanced native Chromium swipe regression then passes on an artificially
+  scrollable document: starting beside the input, on either drawing or on a label
+  prevents page panning; a swipe starting outside the instrument actually scrolls.
+  Cross-engine event tests cover early cancellation, noncancelable events,
+  untouched dialogs and absent/throwing host bridges. These do not emulate native
+  iPhone host sheets in Telegram or ChatGPT.
+- Syntax, whitespace, documentation links and Compose/Caddy validation pass.
+  Offline shell advances to v12 without a saved-state migration. A pre-release
+  v11 mobile WebKit profile with Russian, position 18 and disabled haptics is
+  prepared for public retention verification. Exact-head review, final full CI,
+  public/offline/persistence checks and health/resources are recorded on the PR.
+
+## 2026-11-14: Restore saved appearance before first reveal
+
+- A same-origin blocking boot script marks startup before body/styles paint.
+  The module validates saved state, renders position, accent, selected level and
+  language, resolves layout with transitions disabled, then reveals the app.
+  Normal interactive motion remains available; no spinner, fade or timer is added.
+  Decision 0009 documents the startup contract. The v12 offline shell and public
+  asset verification include boot.js.
+- The full updated local suite passes 53 checks with three intentional platform
+  skips. New Chromium/mobile WebKit tests delay the module response, verify that
+  default UI stays hidden, then inspect the first visible animation frames across
+  four red/green openings and reloads. Position, accent, level, Russian locale and
+  zero startup animations match the restored state. Offline reload, malformed or
+  blocked storage, gestures, responsive dialogs and accessibility also pass.
+- Manual checks in both engines confirm that disabling JavaScript still shows
+  the static page, noscript explanation and Back link. Syntax, whitespace,
+  relative documentation links and Compose/Caddy validation pass.
+- The earlier gesture PR head's CI caught a timing problem in its new test: the
+  second viewport sampled handle bounds during an intentional zone-button
+  transition. The test now waits for that transition to finish before measuring
+  the grab offset; both focused and full local runs pass. Final exact-head review,
+  CI, public startup/gesture/offline checks, old-profile retention and health are
+  recorded on the combined update PR before deployment.

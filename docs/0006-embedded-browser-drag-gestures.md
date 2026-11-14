@@ -1,6 +1,6 @@
 # Embedded browser drag gestures
 
-Status: Accepted
+Status: Accepted; touch-protection scope superseded by [decision 0008](0008-forgiving-gauge-touch-area.md)
 
 Date: 2026-11-14
 

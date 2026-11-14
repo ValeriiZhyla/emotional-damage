@@ -99,6 +99,7 @@ function saveState() {
 const root = document.documentElement;
 const input = document.querySelector('#stress');
 const gauge = document.querySelector('#gauge');
+const instrument = document.querySelector('#instrument');
 const handle = document.querySelector('#handle');
 const zoneButtons = [...document.querySelectorAll('[data-zone]')];
 const saveNote = document.querySelector('#save-note');
@@ -213,12 +214,14 @@ function finishDrag(event) {
 document.addEventListener('pointerdown', () => gauge.classList.add('pointer-input'), { capture: true });
 document.addEventListener('keydown', () => gauge.classList.remove('pointer-input'), { capture: true });
 
-input.addEventListener('pointerdown', event => {
-  if (drag || !event.isPrimary || (event.pointerType === 'mouse' && event.button !== 0)) return;
+instrument.addEventListener('pointerdown', event => {
+  if (event.target.closest('button') || drag || !event.isPrimary || (event.pointerType === 'mouse' && event.button !== 0)) return;
   event.preventDefault();
   const bounds = gauge.getBoundingClientRect();
   const grip = handle.getBoundingClientRect();
-  const onHandle = event.clientX >= grip.left && event.clientX <= grip.right && event.clientY >= grip.top && event.clientY <= grip.bottom;
+  // A near miss should still grab the handle without jumping to the finger.
+  const padding = 24;
+  const onHandle = event.clientX >= grip.left - padding && event.clientX <= grip.right + padding && event.clientY >= grip.top - padding && event.clientY <= grip.bottom + padding;
   drag = {
     pointerId: event.pointerId, top: bounds.top, height: bounds.height,
     grabOffset: onHandle ? event.clientY - (grip.top + grip.height / 2) : 0,
@@ -238,18 +241,20 @@ input.addEventListener('pointermove', event => {
     renderDrag(pendingDragY);
   });
 });
-// A containing iOS browser sheet can pan independently of CSS touch-action.
-// Consume only slider touches; dialogs and gestures elsewhere stay native.
-input.addEventListener('touchmove', event => {
-  if (!drag) return;
-  if (event.cancelable) event.preventDefault();
+// Protect the whole instrument, including near misses and the endpoint drawings.
+// Start cancellation early; keep level-button taps and dialog scrolling native.
+function protectGaugeTouch(event) {
+  if (event.cancelable && (event.type === 'touchmove' || !event.target.closest('button'))) event.preventDefault();
   try {
     // Telegram's ordinary in-app browser uses this event for draggable content.
     // The optional, undocumented bridge may be absent or change between versions.
     const bridge = window.TelegramWebviewProxy;
     if (typeof bridge?.postEvent === 'function') bridge.postEvent('cancellingTouch', '{}');
   } catch { /* Host integration must never interrupt the gauge. */ }
-}, { passive: false });
+}
+for (const eventName of ['touchstart', 'touchmove']) {
+  instrument.addEventListener(eventName, protectGaugeTouch, { passive: false });
+}
 for (const eventName of ['pointerup', 'pointercancel', 'lostpointercapture']) {
   input.addEventListener(eventName, finishDrag);
 }
@@ -300,6 +305,9 @@ window.addEventListener('storage', event => {
 readState();
 hapticsInput.checked = state.haptics;
 renderLanguage();
+// Settle saved styles with startup transitions disabled before revealing the UI.
+handle.getBoundingClientRect();
+root.classList.remove('starting');
 
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/sw.js').catch(() => { /* The gauge works without offline installation. */ });

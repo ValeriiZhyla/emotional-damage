@@ -8,6 +8,60 @@ const titles = {
   ru: ['Хорошо', 'Усталость', 'Перегрузка', 'Истощение'],
 };
 
+test.describe('saved appearance on opening', () => {
+  test.use({ serviceWorkers: 'block' }); // Gate the actual module request on every reload.
+  test('slow loading and repeated reloads never reveal the default state or a startup transition', async ({ page }) => {
+    await page.addInitScript(key => {
+      if (!localStorage.getItem(key)) localStorage.setItem(key, JSON.stringify({ version: 1, value: 19, language: 'ru', haptics: false }));
+      window.visibleFrames = [];
+      function frame() {
+        const app = document.querySelector('.app');
+        const handle = document.querySelector('#handle');
+        const gauge = document.querySelector('#gauge');
+        if (app && handle && gauge && document.styleSheets.length && getComputedStyle(app).visibility === 'visible') {
+          const grip = handle.getBoundingClientRect();
+          const bounds = gauge.getBoundingClientRect();
+          window.visibleFrames.push({
+            value: document.querySelector('#stress').value,
+            language: document.documentElement.lang,
+            zone: document.querySelector('.zone.selected').dataset.zone,
+            color: getComputedStyle(document.querySelector('h1 em')).color,
+            fraction: (grip.y + grip.height / 2 - bounds.y) / bounds.height,
+            animations: document.getAnimations().filter(animation => animation.playState !== 'finished').length,
+          });
+        }
+        if (window.visibleFrames.length < 8) requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+    }, KEY);
+    let release;
+    let gate;
+    await page.route('**/app.js', async route => { await gate; await route.continue(); });
+    for (const value of [19, 19, 0, 19]) {
+      if (page.url() !== 'about:blank') await page.locator('#stress').press(value === 0 ? 'Home' : 'End');
+      gate = new Promise(resolve => { release = resolve; });
+      await page.goto('/', { waitUntil: 'commit' });
+      await page.locator('.app').waitFor({ state: 'attached' });
+      await expect(page.locator('html')).toHaveClass('starting');
+      await expect(page.locator('.app')).toHaveCSS('visibility', 'hidden');
+      await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+      expect(await page.evaluate(() => window.visibleFrames)).toEqual([]);
+      release();
+      await expect(page.locator('#stress')).toHaveValue(String(value));
+      await expect(page.locator('.app')).toHaveCSS('visibility', 'visible');
+      await page.waitForFunction(() => window.visibleFrames.length >= 2);
+      for (const frame of await page.evaluate(() => window.visibleFrames)) {
+        expect(frame.value).toBe(String(value));
+        expect(frame.zone).toBe(String(Math.floor(value / 5)));
+        expect(frame.language).toBe('ru');
+        expect(frame.color).toBe(value === 19 ? 'rgb(255, 77, 90)' : 'rgb(151, 199, 123)');
+        expect(Math.abs(frame.fraction - (value + .5) / 20)).toBeLessThan(.002);
+        expect(frame.animations).toBe(0);
+      }
+    }
+  });
+});
+
 test('all 20 pointer positions select the correct zone and survive a new page', async ({ page, context }) => {
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
@@ -133,12 +187,12 @@ test('native touch swipes track rapid direction changes and cancel cleanly', asy
   expect(moves.length).toBeGreaterThan(0);
   expect(moves.every(Boolean)).toBe(true);
   const hostEvents = await page.evaluate(() => window.hostEvents);
-  expect(hostEvents).toHaveLength(moves.length);
+  expect(hostEvents).toHaveLength(moves.length + 1); // Cancel from touchstart, before the first move.
   expect(hostEvents.every(event => event.name === 'cancellingTouch' && event.data === '{}')).toBe(true);
   await session.detach();
 });
 
-test('embedded gesture handling stays inside an active slider drag and tolerates unavailable hosts', async ({ page }) => {
+test('embedded gesture protection covers the instrument and tolerates unavailable hosts', async ({ page }) => {
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
   await page.addInitScript(() => {
@@ -146,31 +200,35 @@ test('embedded gesture handling stays inside an active slider drag and tolerates
     window.TelegramWebviewProxy = { postEvent: (name, data) => window.hostEvents.push({ name, data }) };
   });
   await page.goto('/');
-  // DOM propagation checks complement the native Chromium swipe above. A real
-  // captured pointer starts the drag; synthetic touchmove events exercise both
-  // engines without relying on WebKit's non-constructible Touch interface.
-  const touchMove = (selector, cancelable = true) => page.locator(selector).evaluate((element, cancelable) => {
-    const event = new Event('touchmove', { bubbles: true, cancelable });
+  // DOM propagation checks complement native Chromium swipes. Synthetic events
+  // also cover WebKit without its non-constructible Touch interface.
+  const touch = (selector, type = 'touchmove', cancelable = true) => page.locator(selector).first().evaluate((element, { type, cancelable }) => {
+    const event = new Event(type, { bubbles: true, cancelable });
     element.dispatchEvent(event);
     return event.defaultPrevented;
-  }, cancelable);
-  expect(await touchMove('#stress')).toBe(false);
+  }, { type, cancelable });
+  for (const selector of ['#stress', '#instrument', '.heart svg', '.skull svg']) {
+    expect(await touch(selector, 'touchstart')).toBe(true);
+    expect(await touch(selector)).toBe(true);
+  }
+  // A button tap retains its click; swiping over it cannot pan the browser.
+  expect(await touch('.zone-title', 'touchstart')).toBe(false);
+  expect(await touch('.zone-title')).toBe(true);
+  expect(await touch('#stress', 'touchmove', false)).toBe(false);
+  expect(await page.evaluate(() => window.hostEvents)).toEqual(
+    Array.from({ length: 11 }, () => ({ name: 'cancellingTouch', data: '{}' }))
+  );
+  expect(await touch('h1', 'touchstart')).toBe(false);
+  expect(await touch('h1')).toBe(false);
+  for (const name of ['info', 'settings']) {
+    await page.locator(`#open-${name}`).click();
+    expect(await touch(`#${name}-dialog p`, 'touchstart')).toBe(false);
+    expect(await touch(`#${name}-dialog p`)).toBe(false);
+    await page.locator(`#${name}-dialog .close-dialog`).click();
+  }
+  expect(await page.evaluate(() => window.hostEvents.length)).toBe(11);
   const gauge = await page.locator('#gauge').boundingBox();
   const x = gauge.x + gauge.width * .74;
-  await page.mouse.move(x, gauge.y + gauge.height * .125);
-  await page.mouse.down();
-  expect(await touchMove('#stress')).toBe(true);
-  expect(await touchMove('#stress', false)).toBe(false);
-  expect(await page.evaluate(() => window.hostEvents)).toEqual([
-    { name: 'cancellingTouch', data: '{}' }, { name: 'cancellingTouch', data: '{}' },
-  ]);
-  await page.mouse.up();
-  expect(await touchMove('#stress')).toBe(false);
-  await page.locator('#open-info').click();
-  expect(await touchMove('#info-dialog .sheet-intro')).toBe(false);
-  expect(await page.evaluate(() => window.hostEvents.length)).toBe(2);
-  await page.locator('#info-dialog .close-dialog').click();
-
   for (const mode of ['missing', 'throwing']) {
     await page.evaluate(mode => {
       if (mode === 'missing') delete window.TelegramWebviewProxy;
@@ -178,21 +236,126 @@ test('embedded gesture handling stays inside an active slider drag and tolerates
     }, mode);
     await page.mouse.move(x, gauge.y + gauge.height * .5);
     await page.mouse.down();
-    expect(await touchMove('#stress')).toBe(true);
+    expect(await touch('#stress')).toBe(true);
     await page.mouse.move(x, gauge.y + gauge.height * .875);
     await page.mouse.up();
     await expect(page.locator('#stress')).toHaveValue('17');
     await expect(page.locator('#gauge')).not.toHaveClass(/dragging/);
     expect(await page.evaluate(key => JSON.parse(localStorage.getItem(key)).value, KEY)).toBe(17);
-    expect(await touchMove('#stress')).toBe(false);
+    expect(await touch('h1')).toBe(false);
   }
   expect(errors).toEqual([]);
+});
+
+test('near misses outside the old input grab the gauge without an initial jump', async ({ page }) => {
+  for (const viewport of [{ width: 375, height: 812 }, { width: 1440, height: 900 }]) {
+    await page.setViewportSize(viewport);
+    await page.goto('/');
+    await page.locator('.zone[data-zone="0"] .zone-title').click();
+    await page.locator('#handle').evaluate(el => Promise.all(el.getAnimations().map(animation => animation.finished)));
+    const gauge = await page.locator('#gauge').boundingBox();
+    const input = await page.locator('#stress').boundingBox();
+    const grip = await page.locator('#handle').boundingBox();
+    const x = input.x + input.width + 6;
+    const y = grip.y + grip.height / 2 + 10;
+    expect(await page.evaluate(({ x, y }) => document.elementFromPoint(x, y).id, { x, y })).not.toBe('stress');
+    await page.mouse.move(x, y);
+    await page.mouse.down();
+    await expect(page.locator('#stress')).toHaveValue('2');
+    await expect(page.locator('#gauge')).toHaveClass(/dragging/);
+    await page.mouse.move(x, y + gauge.height * .5);
+    await page.evaluate(() => new Promise(requestAnimationFrame));
+    const moved = await page.locator('#handle').boundingBox();
+    expect(Math.abs(moved.y - grip.y - gauge.height * .5)).toBeLessThan(2);
+    await page.mouse.up();
+    await expect(page.locator('#stress')).toHaveValue('12');
+    // Resizing must end a captured near-miss drag without leaving a pending frame.
+    await page.mouse.move(x, gauge.y + gauge.height * .875);
+    await page.mouse.down();
+    await page.setViewportSize({ width: viewport.width, height: viewport.height - 20 });
+    await expect(page.locator('#gauge')).not.toHaveClass(/dragging/);
+    await page.mouse.up();
+    // The protected area does not intercept actual level buttons.
+    for (const zone of [0, 3, 1, 2]) {
+      await page.locator(`.zone[data-zone="${zone}"] .zone-title`).click();
+      await expect(page.locator('#stress')).toHaveValue(String(zone * 5 + 2));
+      await expect(page.locator('#gauge')).not.toHaveClass(/dragging/);
+    }
+  }
+});
+
+test('native swipes starting beside the slider or on its drawings stay protected', async ({ page, browserName }) => {
+  test.skip(browserName !== 'chromium', 'CDP supplies native swipes; WebKit covers taps and event propagation.');
+  await page.addInitScript(() => {
+    window.hostEvents = [];
+    window.touchEvents = [];
+    window.TelegramWebviewProxy = { postEvent: (name, data) => window.hostEvents.push({ name, data }) };
+    for (const type of ['touchstart', 'touchmove']) document.addEventListener(type, event => {
+      window.touchEvents.push({ type, prevented: event.defaultPrevented });
+    });
+  });
+  await page.goto('/');
+  // Make scrolling possible so zero movement proves protection rather than
+  // merely the normal one-screen layout. Touches outside must still scroll.
+  await page.evaluate(() => {
+    document.body.style.overflow = 'auto';
+    const spacer = document.createElement('div');
+    spacer.style.height = '100vh';
+    document.body.append(spacer);
+  });
+  expect(await page.evaluate(() => document.documentElement.scrollHeight - innerHeight)).toBeGreaterThan(300);
+  const session = await page.context().newCDPSession(page);
+  const gauge = await page.locator('#gauge').boundingBox();
+  const input = await page.locator('#stress').boundingBox();
+  const heart = await page.locator('.heart').boundingBox();
+  const skull = await page.locator('.skull').boundingBox();
+  const label = await page.locator('.zone-title').first().boundingBox();
+  const starts = [
+    { x: input.x + input.width + 8, y: gauge.y + gauge.height * .5 },
+    { x: heart.x + heart.width / 2, y: heart.y + heart.height / 2 },
+    { x: skull.x + skull.width / 2, y: skull.y + skull.height / 2 },
+    { x: label.x + 10, y: label.y + label.height / 2, button: true },
+  ];
+  for (const start of starts) {
+    await page.evaluate(() => { window.touchEvents = []; window.hostEvents = []; });
+    const point = { x: start.x, y: start.y, id: 1 };
+    await session.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [point] });
+    for (const offset of [35, -35, 50]) {
+      await session.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ ...point, y: start.y + offset }] });
+    }
+    if (!start.button) await expect(page.locator('#gauge')).toHaveClass(/dragging/);
+    await session.send('Input.dispatchTouchEvent', { type: 'touchCancel', touchPoints: [] });
+    await expect(page.locator('#gauge')).not.toHaveClass(/dragging/);
+    const events = await page.evaluate(() => window.touchEvents);
+    expect(events[0]).toEqual({ type: 'touchstart', prevented: !start.button });
+    const moves = events.filter(event => event.type === 'touchmove');
+    expect(moves.length).toBeGreaterThan(0);
+    expect(moves.every(event => event.prevented)).toBe(true);
+    expect(await page.evaluate(() => window.hostEvents.length)).toBe(events.length);
+    expect(await page.evaluate(() => window.scrollY)).toBe(0);
+  }
+  const heading = await page.locator('h1').boundingBox();
+  const outside = { x: heading.x + 30, y: heading.y + heading.height - 5, id: 1 };
+  await session.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [outside] });
+  for (const offset of [-25, -50, -80]) {
+    await session.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ ...outside, y: outside.y + offset }] });
+  }
+  await session.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(20);
+  await session.detach();
 });
 
 test('touch can set the gauge without scrolling the screen', async ({ page, isMobile }) => {
   test.skip(!isMobile, 'Touch interaction is covered by the mobile WebKit project.');
   await page.goto('/');
   const bounds = await page.locator('#gauge').boundingBox();
+  const input = await page.locator('#stress').boundingBox();
+  await page.touchscreen.tap(input.x + input.width + 8, bounds.y + bounds.height * .875);
+  await expect(page.locator('#stress')).toHaveValue('17');
+  for (const zone of [0, 3, 1, 2]) {
+    await page.locator(`.zone[data-zone="${zone}"] .zone-title`).tap();
+    await expect(page.locator('#stress')).toHaveValue(String(zone * 5 + 2));
+  }
   await page.touchscreen.tap(bounds.x + bounds.width * .74, bounds.y + bounds.height * .875);
   await expect(page.locator('#stress')).toHaveValue('17');
   expect(await page.evaluate(() => window.scrollY)).toBe(0);
