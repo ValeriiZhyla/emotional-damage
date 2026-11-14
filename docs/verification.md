@@ -206,3 +206,27 @@ screenshots, CI and publication results are recorded on the fix PR.
   and disabled haptics is prepared for retention verification. Full CI and public
   layout/offline/persistence/health results are recorded on the PR. Physical
   iPhone/browser-chrome verification is unavailable.
+
+## 2026-11-14: Forgiving gauge touch area
+
+- Expanded touch protection from the narrow input to the whole instrument,
+  including blank space and endpoint drawings. Default cancellation and the
+  optional Telegram cancellation request begin at touchstart. Level-button taps
+  remain native; swipes over them are consumed. Dialogs and the rest of the page
+  keep their native gestures. Decision 0008 updates the earlier scope in 0006.
+- Blank space can begin a captured range drag. A 24px margin around the handle
+  preserves the initial grab offset. The full local Chromium/mobile WebKit suite
+  passes 51 checks with three intentional platform skips, including near misses
+  at phone/desktop sizes, resize cleanup, native mobile taps, level buttons,
+  keyboard focus, persistence, offline, responsive dialogs and WCAG A/AA checks.
+- An enhanced native Chromium swipe regression then passes on an artificially
+  scrollable document: starting beside the input, on either drawing or on a label
+  prevents page panning; a swipe starting outside the instrument actually scrolls.
+  Cross-engine event tests cover early cancellation, noncancelable events,
+  untouched dialogs and absent/throwing host bridges. These do not emulate native
+  iPhone host sheets in Telegram or ChatGPT.
+- Syntax, whitespace, documentation links and Compose/Caddy validation pass.
+  Offline shell advances to v12 without a saved-state migration. A pre-release
+  v11 mobile WebKit profile with Russian, position 18 and disabled haptics is
+  prepared for public retention verification. Exact-head review, final full CI,
+  public/offline/persistence checks and health/resources are recorded on the PR.

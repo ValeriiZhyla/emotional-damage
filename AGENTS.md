@@ -49,10 +49,14 @@ in sync with translations; see decision 0005 for the copy conventions and source
   without position easing; preserve the initial contact offset on the handle.
   Keep saved/accessibility values discrete, and settle visually onto a tick on
   release/cancellation. Cancel pending frames when a gesture ends.
-- Consume touch panning only on the slider during an active drag. The optional
-  Telegram browser gesture-cancellation bridge must tolerate absence or failure;
-  keep dialogs and touches elsewhere native. Do not load a Telegram SDK or treat
-  this ordinary website as a Mini App. See decision 0006 for host limitations.
+- Protect the whole instrument, including endpoint drawings and surrounding blank
+  space, against touch panning from touchstart. Blank space can begin a captured
+  slider drag; a 24px margin around the handle preserves the initial grab offset.
+  Level buttons retain native taps, while swipes over them are consumed. Keep
+  dialogs and touches outside the instrument native. The optional Telegram browser
+  gesture-cancellation bridge must tolerate absence or failure; do not load its SDK
+  or treat this ordinary website as a Mini App. See decisions 0006 and 0008 for
+  scope and host limitations.
 - Mobile uses the available viewport height for a larger gauge. At widths of
   900px and heights above 570px, use a wide two-column desktop layout; short
   landscape screens have a compact two-column layout from 600px width.
