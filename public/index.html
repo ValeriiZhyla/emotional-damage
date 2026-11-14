@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#101010">
   <meta name="color-scheme" content="dark">
-  <meta name="description" content="A little space to notice how you feel. Move the gauge, find your place, take a moment.">
+  <meta name="description" content="A simple gauge to check in with yourself. Four levels, from okay to exhausted. Saved on your device.">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="apple-mobile-web-app-title" content="Emotional Damage">
@@ -36,7 +36,7 @@
 
     <main>
       <div class="introduction">
-        <p class="eyebrow" data-i18n="eyebrow">A MOMENT WITH YOURSELF</p>
+        <p class="eyebrow" data-i18n="eyebrow">A MOMENT FOR YOURSELF</p>
         <h1><span data-i18n="question">How are you,</span><br><em data-i18n="really">really?</em></h1>
       </div>
 
@@ -49,8 +49,8 @@
           <div class="zones" id="zones">
             <button class="zone selected" type="button" data-zone="0" aria-pressed="true"><span class="zone-dot"></span><span class="zone-copy"><span class="zone-title" data-i18n="zone0">Okay</span><span class="zone-caption" data-i18n="caption0">Room to breathe</span></span></button>
             <button class="zone" type="button" data-zone="1" aria-pressed="false"><span class="zone-dot"></span><span class="zone-copy"><span class="zone-title" data-i18n="zone1">Tired</span><span class="zone-caption" data-i18n="caption1">Running a little low</span></span></button>
-            <button class="zone" type="button" data-zone="2" aria-pressed="false"><span class="zone-dot"></span><span class="zone-copy"><span class="zone-title" data-i18n="zone2">Overloaded</span><span class="zone-caption" data-i18n="caption2">A bit too much of everything</span></span></button>
-            <button class="zone" type="button" data-zone="3" aria-pressed="false"><span class="zone-dot"></span><span class="zone-copy"><span class="zone-title" data-i18n="zone3">Exhausted</span><span class="zone-caption" data-i18n="caption3">Very little left to give</span></span></button>
+            <button class="zone" type="button" data-zone="2" aria-pressed="false"><span class="zone-dot"></span><span class="zone-copy"><span class="zone-title" data-i18n="zone2">Overloaded</span><span class="zone-caption" data-i18n="caption2">Everything feels a bit much</span></span></button>
+            <button class="zone" type="button" data-zone="3" aria-pressed="false"><span class="zone-dot"></span><span class="zone-copy"><span class="zone-title" data-i18n="zone3">Exhausted</span><span class="zone-caption" data-i18n="caption3">Very little energy left</span></span></button>
           </div>
           <div class="ruler" id="ruler" aria-hidden="true">
             <div class="rail"></div>
@@ -60,7 +60,7 @@
             <div class="divider divider-three"></div>
             <div class="handle" id="handle"><span></span><span></span><span></span></div>
           </div>
-          <label class="sr-only" for="stress" data-i18n="gaugeLabel">How much emotional stress are you feeling?</label>
+          <label class="sr-only" for="stress" data-i18n="gaugeLabel">How stressed do you feel right now?</label>
           <input type="range" id="stress" class="gauge-input" min="0" max="19" step="1" value="2" orient="vertical" aria-orientation="vertical" aria-valuetext="Okay, position 3 of 5" aria-describedby="drag-hint">
         </div>
 
@@ -70,38 +70,38 @@
       </section>
 
       <footer class="check-in-footer">
-        <p class="drag-hint" id="drag-hint"><svg viewBox="0 0 18 22" aria-hidden="true"><path d="M9 2v18M5 6l4-4 4 4M5 16l4 4 4-4"/></svg><span data-i18n="dragHint">Move it to where you are.</span></p>
-        <p class="quiet-note" id="save-note" data-i18n="quietNote">Just a feeling. Yours to notice.</p>
+        <p class="drag-hint" id="drag-hint"><svg viewBox="0 0 18 22" aria-hidden="true"><path d="M9 2v18M5 6l4-4 4 4M5 16l4 4 4-4"/></svg><span data-i18n="dragHint">Move it to match how you feel.</span></p>
+        <p class="quiet-note" id="save-note" data-i18n="quietNote">Just for you. No judgment.</p>
       </footer>
-      <noscript><p class="noscript">Please enable JavaScript to move the gauge. / Bitte JavaScript aktivieren. / Включите JavaScript.</p></noscript>
+      <noscript><p class="noscript">Enable JavaScript to use the gauge. / Aktiviere JavaScript, um die Skala zu nutzen. / Включи JavaScript, чтобы пользоваться шкалой.</p></noscript>
     </main>
   </div>
 
   <dialog class="sheet" id="info-dialog" aria-labelledby="info-title">
-    <div class="sheet-header"><p class="eyebrow" data-i18n="aboutEyebrow">A SMALL CHECK-IN</p><button class="icon-button close-dialog" type="button" aria-label="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div>
-    <h2 id="info-title" data-i18n="infoTitle">A little space to notice.</h2>
-    <p class="sheet-intro" data-i18n="infoIntro">Move the marker until it feels about right. There is no correct position, and you don’t need to change how you feel.</p>
+    <div class="sheet-header"><p class="eyebrow" data-i18n="aboutEyebrow">A MOMENT TO PAUSE</p><button class="icon-button close-dialog" type="button" aria-label="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div>
+    <h2 id="info-title" data-i18n="infoTitle">How it works</h2>
+    <p class="sheet-intro" data-i18n="infoIntro">Move the marker to match how you feel. There’s no right answer, and you don’t need to change anything.</p>
     <div class="level-guide">
-      <section><h3><span class="guide-dot dot-0"></span><span data-i18n="zone0">Okay</span></h3><p data-i18n="description0">There’s some room in your day. You can focus, connect, and enjoy the things you usually enjoy.</p></section>
-      <section><h3><span class="guide-dot dot-1"></span><span data-i18n="zone1">Tired</span></h3><p data-i18n="description1">Focusing takes more effort. You’d like to be done for the day, but something pleasant still sounds good.</p></section>
-      <section><h3><span class="guide-dot dot-2"></span><span data-i18n="zone2">Overloaded</span></h3><p data-i18n="description2">Everything seems to ask something of you. Irritation comes easily, tasks keep circling in your head, and company can feel like more work.</p></section>
-      <section><h3><span class="guide-dot dot-3"></span><span data-i18n="zone3">Exhausted</span></h3><p data-i18n="description3">Even enjoyable things can feel demanding. Small actions take a lot, and you may want to be left alone.</p></section>
+      <section><h3><span class="guide-dot dot-0"></span><span data-i18n="zone0">Okay</span></h3><p data-i18n="description0">You have energy for everyday things. You can focus, spend time with others, and do things you enjoy.</p></section>
+      <section><h3><span class="guide-dot dot-1"></span><span data-i18n="zone1">Tired</span></h3><p data-i18n="description1">Focusing takes more effort. You’d like to be done for the day, but still feel like doing something you enjoy.</p></section>
+      <section><h3><span class="guide-dot dot-2"></span><span data-i18n="zone2">Overloaded</span></h3><p data-i18n="description2">Everything feels like another demand. You’re easily irritated, thoughts of unfinished tasks keep coming back, and socializing takes effort.</p></section>
+      <section><h3><span class="guide-dot dot-3"></span><span data-i18n="zone3">Exhausted</span></h3><p data-i18n="description3">Even things you enjoy feel draining. Small tasks take a lot of effort, and you may just want to be left alone.</p></section>
     </div>
-    <p class="sheet-footnote" data-i18n="infoFootnote">A reflection toy, not a test or medical advice. These are loose descriptions; your own meaning matters most.</p>
+    <p class="sheet-footnote" data-i18n="infoFootnote">A fidget for reflection, not a test or medical advice. The descriptions are just a rough guide.</p>
   </dialog>
 
   <dialog class="sheet" id="settings-dialog" aria-labelledby="settings-title">
-    <div class="sheet-header"><p class="eyebrow" data-i18n="settingsEyebrow">MAKE YOURSELF AT HOME</p><button class="icon-button close-dialog" type="button" aria-label="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div>
-    <h2 id="settings-title" data-i18n="settingsTitle">Little preferences.</h2>
+    <div class="sheet-header"><p class="eyebrow" data-i18n="settingsEyebrow">MAKE IT YOURS</p><button class="icon-button close-dialog" type="button" aria-label="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div>
+    <h2 id="settings-title" data-i18n="settingsTitle">Settings</h2>
     <fieldset class="language-options"><legend data-i18n="languageLabel">Language</legend>
       <label><input type="radio" name="language" value="en" checked><span lang="en">English</span><span class="language-check" aria-hidden="true">✓</span></label>
       <label><input type="radio" name="language" value="de"><span lang="de">Deutsch</span><span class="language-check" aria-hidden="true">✓</span></label>
       <label><input type="radio" name="language" value="ru"><span lang="ru">Русский</span><span class="language-check" aria-hidden="true">✓</span></label>
     </fieldset>
-    <label class="haptics-option" id="haptics-option" hidden><span><span class="preference-label" data-i18n="hapticsLabel">Little tactile ticks</span><span class="preference-caption" data-i18n="hapticsCaption">A small vibration as you move.</span></span><input type="checkbox" id="haptics" role="switch" checked></label>
-    <p class="privacy-note" data-i18n="privacyNote">Your position and preferences stay in this browser on this device. No account, tracking, or shared history.</p>
-    <p class="storage-note" data-i18n="storageNote">Clearing website data clears your saved position too.</p>
-    <p class="install-note" data-i18n="installNote">Keep it close: use your browser’s “Add to Home Screen”. After your first visit, the gauge works offline too.</p>
+    <label class="haptics-option" id="haptics-option" hidden><span><span class="preference-label" data-i18n="hapticsLabel">Haptic feedback</span><span class="preference-caption" data-i18n="hapticsCaption">A light vibration as you move the marker.</span></span><input type="checkbox" id="haptics" role="switch" checked></label>
+    <p class="privacy-note" data-i18n="privacyNote">Your last position and settings are saved only in this browser on this device. No account or tracking.</p>
+    <p class="storage-note" data-i18n="storageNote">Clearing site data also removes your saved position and settings.</p>
+    <p class="install-note" data-i18n="installNote">On iPhone, open this page in Safari: “Share” → “Add to Home Screen”. After the first online visit, the gauge also works offline.</p>
   </dialog>
 </body>
 </html>

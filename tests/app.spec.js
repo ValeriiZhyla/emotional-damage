@@ -238,7 +238,7 @@ test('blocked storage leaves the gauge usable and explains that saving is unavai
   await page.goto('/');
   await page.locator('[data-zone="2"]').click();
   await expect(page.locator('#stress')).toHaveValue('12');
-  await expect(page.locator('#save-note')).toContainText('Saving is unavailable');
+  await expect(page.locator('#save-note')).toContainText('Can’t save in this browser');
 });
 
 test('optional haptics tolerate throwing APIs and hide when unsupported', async ({ page }) => {

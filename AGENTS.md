@@ -6,6 +6,11 @@ A one-screen reflection fidget at `https://stress.valeriizhyla.com`. The user
 authorized public access and a card on the personal homepage. Four zones, each
 with five positions: Okay, Tired, Overloaded, Exhausted. English, German, Russian.
 Keep the tone personal and descriptive; this is not a diagnostic or advice tool.
+Write each locale as natural, concise UI copy rather than a literal translation.
+Use informal singular address in German and Russian, gender-neutral Russian
+phrasing, and standard names for controls. Installation hints must identify the
+platform/browser and use its documented menu labels. Keep English HTML fallbacks
+in sync with translations; see decision 0005 for the copy conventions and sources.
 
 ## Structure
 
