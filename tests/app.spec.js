@@ -108,6 +108,12 @@ test('release flushes its final point and cancels pending movement', async ({ pa
 
 test('native touch swipes track rapid direction changes and cancel cleanly', async ({ page, browserName }) => {
   test.skip(browserName !== 'chromium', 'CDP supplies native touch swipes; mobile WebKit covers shared pointer behavior and native taps.');
+  await page.addInitScript(() => {
+    window.hostEvents = [];
+    window.touchMoves = [];
+    window.TelegramWebviewProxy = { postEvent: (name, data) => window.hostEvents.push({ name, data }) };
+    document.addEventListener('touchmove', event => window.touchMoves.push(event.defaultPrevented));
+  });
   await page.goto('/');
   const session = await page.context().newCDPSession(page);
   const gauge = await page.locator('#gauge').boundingBox();
@@ -123,7 +129,64 @@ test('native touch swipes track rapid direction changes and cancel cleanly', asy
   await session.send('Input.dispatchTouchEvent', { type: 'touchCancel', touchPoints: [] });
   await expect(page.locator('#gauge')).not.toHaveClass(/dragging/);
   expect(await page.evaluate(() => window.scrollY)).toBe(0);
+  const moves = await page.evaluate(() => window.touchMoves);
+  expect(moves.length).toBeGreaterThan(0);
+  expect(moves.every(Boolean)).toBe(true);
+  const hostEvents = await page.evaluate(() => window.hostEvents);
+  expect(hostEvents).toHaveLength(moves.length);
+  expect(hostEvents.every(event => event.name === 'cancellingTouch' && event.data === '{}')).toBe(true);
   await session.detach();
+});
+
+test('embedded gesture handling stays inside an active slider drag and tolerates unavailable hosts', async ({ page }) => {
+  const errors = [];
+  page.on('pageerror', error => errors.push(error.message));
+  await page.addInitScript(() => {
+    window.hostEvents = [];
+    window.TelegramWebviewProxy = { postEvent: (name, data) => window.hostEvents.push({ name, data }) };
+  });
+  await page.goto('/');
+  // DOM propagation checks complement the native Chromium swipe above. A real
+  // captured pointer starts the drag; synthetic touchmove events exercise both
+  // engines without relying on WebKit's non-constructible Touch interface.
+  const touchMove = (selector, cancelable = true) => page.locator(selector).evaluate((element, cancelable) => {
+    const event = new Event('touchmove', { bubbles: true, cancelable });
+    element.dispatchEvent(event);
+    return event.defaultPrevented;
+  }, cancelable);
+  expect(await touchMove('#stress')).toBe(false);
+  const gauge = await page.locator('#gauge').boundingBox();
+  const x = gauge.x + gauge.width * .74;
+  await page.mouse.move(x, gauge.y + gauge.height * .125);
+  await page.mouse.down();
+  expect(await touchMove('#stress')).toBe(true);
+  expect(await touchMove('#stress', false)).toBe(false);
+  expect(await page.evaluate(() => window.hostEvents)).toEqual([
+    { name: 'cancellingTouch', data: '{}' }, { name: 'cancellingTouch', data: '{}' },
+  ]);
+  await page.mouse.up();
+  expect(await touchMove('#stress')).toBe(false);
+  await page.locator('#open-info').click();
+  expect(await touchMove('#info-dialog .sheet-intro')).toBe(false);
+  expect(await page.evaluate(() => window.hostEvents.length)).toBe(2);
+  await page.locator('#info-dialog .close-dialog').click();
+
+  for (const mode of ['missing', 'throwing']) {
+    await page.evaluate(mode => {
+      if (mode === 'missing') delete window.TelegramWebviewProxy;
+      else window.TelegramWebviewProxy = { postEvent() { throw new Error('Host unavailable'); } };
+    }, mode);
+    await page.mouse.move(x, gauge.y + gauge.height * .5);
+    await page.mouse.down();
+    expect(await touchMove('#stress')).toBe(true);
+    await page.mouse.move(x, gauge.y + gauge.height * .875);
+    await page.mouse.up();
+    await expect(page.locator('#stress')).toHaveValue('17');
+    await expect(page.locator('#gauge')).not.toHaveClass(/dragging/);
+    expect(await page.evaluate(key => JSON.parse(localStorage.getItem(key)).value, KEY)).toBe(17);
+    expect(await touchMove('#stress')).toBe(false);
+  }
+  expect(errors).toEqual([]);
 });
 
 test('touch can set the gauge without scrolling the screen', async ({ page, isMobile }) => {
