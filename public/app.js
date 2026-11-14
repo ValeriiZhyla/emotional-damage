@@ -122,8 +122,7 @@ const palette = [
   { at: 0, accent: [151, 199, 123] },
   { at: 4, accent: [178, 199, 122] },
   { at: 9, accent: [224, 188, 112] },
-  { at: 14, accent: [231, 156, 112] },
-  // Every Exhausted position is red, starting at the zone boundary.
+  // Blend through coral across Overloaded, reaching red at Exhausted.
   { at: 15, accent: [255, 105, 115] },
   { at: 19, accent: [255, 77, 90] },
 ];
@@ -193,6 +192,7 @@ function renderDrag(clientY) {
   setValue(value);
   // Follow the finger between ticks; the saved/accessibility value stays discrete.
   root.style.setProperty('--position', `${(value + .5) * 5}%`);
+  root.style.setProperty('--accent', stressAccent(value));
 }
 
 function finishDrag(event) {

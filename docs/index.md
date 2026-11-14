@@ -17,3 +17,4 @@
 | 0007 | [Centered compact dialogs](0007-centered-compact-dialogs.md) | Accepted |
 | 0008 | [Forgiving gauge touch area](0008-forgiving-gauge-touch-area.md) | Accepted |
 | 0009 | [Restore appearance before first reveal](0009-restore-appearance-before-first-reveal.md) | Accepted |
+| 0010 | [Refined glow and colour progression](0010-refined-glow-and-colour-progression.md) | Accepted |

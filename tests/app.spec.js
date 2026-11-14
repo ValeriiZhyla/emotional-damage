@@ -62,6 +62,53 @@ test.describe('saved appearance on opening', () => {
   });
 });
 
+test('accent changes stay gradual into red and follow movement between ticks', async ({ page }) => {
+  await page.goto('/');
+  const gauge = await page.locator('#gauge').boundingBox();
+  const x = gauge.x + gauge.width * .74;
+  const handle = await page.locator('#handle').boundingBox();
+  await page.mouse.move(x, handle.y + handle.height / 2);
+  await page.mouse.down();
+  const colors = [];
+  const sample = async value => {
+    await page.mouse.move(x, gauge.y + gauge.height * (value + .5) / 20);
+    await page.evaluate(() => new Promise(requestAnimationFrame));
+    return page.evaluate(() => {
+      const color = getComputedStyle(document.querySelector('h1 em')).color;
+      return {
+        color,
+        channels: color.match(/[\d.]+/g).map(Number),
+        handle: getComputedStyle(document.querySelector('#handle')).borderTopColor,
+        label: getComputedStyle(document.querySelector('.zone.selected .zone-title')).color,
+      };
+    });
+  };
+  for (let value = 0; value < 20; value++) {
+    const color = await sample(value);
+    colors.push(color.channels);
+    expect(color.handle).toBe(color.color);
+    expect(color.label).toBe(color.color);
+    if (value >= 15) {
+      expect(color.channels[0]).toBe(255);
+      expect(color.channels[1]).toBeLessThanOrEqual(105);
+    }
+  }
+  expect(colors[0]).toEqual([151, 199, 123]);
+  expect(colors[19]).toEqual([255, 77, 90]);
+  for (let index = 1; index < colors.length; index++) {
+    expect(Math.max(...colors[index].map((channel, i) => Math.abs(channel - colors[index - 1][i])))).toBeLessThanOrEqual(16);
+  }
+  // Inside a single saved tick, visual colour still responds to small movements.
+  const before = await sample(14.1);
+  const after = await sample(14.4);
+  await expect(page.locator('#stress')).toHaveValue('14');
+  expect(after.color).not.toBe(before.color);
+  expect(after.channels[1]).toBeLessThan(before.channels[1]);
+  await page.mouse.up();
+  await expect(page.locator('#stress')).toHaveValue('14');
+  expect(await page.evaluate(key => JSON.parse(localStorage.getItem(key)).value, KEY)).toBe(14);
+});
+
 test('all 20 pointer positions select the correct zone and survive a new page', async ({ page, context }) => {
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
