@@ -135,6 +135,44 @@ test('touch can set the gauge without scrolling the screen', async ({ page, isMo
   expect(await page.evaluate(() => window.scrollY)).toBe(0);
 });
 
+test('slider focus is visible for keyboard navigation and hidden after pointer interactions', async ({ page, isMobile }) => {
+  await page.goto('/');
+  const slider = page.locator('#stress');
+  const hasOutline = () => page.locator('#handle').evaluate(element => {
+    const style = getComputedStyle(element);
+    return !['none', 'hidden'].includes(style.outlineStyle) && parseFloat(style.outlineWidth) > 0;
+  });
+  async function tabToSlider() {
+    for (let index = 0; index < 12; index++) {
+      await page.keyboard.press('Tab');
+      if (await slider.evaluate(element => document.activeElement === element)) return;
+    }
+    throw new Error('Slider was not reachable with Tab');
+  }
+  async function pointAt(locator) {
+    if (isMobile) await locator.tap();
+    else await locator.click();
+  }
+
+  await tabToSlider();
+  await expect(slider).toBeFocused();
+  await expect.poll(hasOutline).toBe(true);
+
+  // Range controls can retain :focus-visible when focused by a pointer handler.
+  await pointAt(slider);
+  await expect.poll(hasOutline).toBe(false);
+  const previous = Number(await slider.inputValue());
+  await slider.press(previous === 19 ? 'ArrowUp' : 'ArrowDown');
+  await expect(slider).toHaveValue(String(previous === 19 ? 18 : previous + 1));
+  await expect.poll(hasOutline).toBe(true);
+
+  await pointAt(page.locator('h1'));
+  await expect.poll(hasOutline).toBe(false);
+  await tabToSlider();
+  await expect(slider).toBeFocused();
+  await expect.poll(hasOutline).toBe(true);
+});
+
 test('keyboard direction, boundaries and accessible value match the vertical scale', async ({ page }) => {
   await page.goto('/');
   const slider = page.getByRole('slider');
