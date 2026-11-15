@@ -13,7 +13,7 @@ import {
 import { translations } from '../public/translations.js';
 
 test('defaults are independent, validate language and tolerate absent or broken storage data', () => {
-  assert.deepEqual(defaultState(), { version: 1, value: 2, language: 'en', haptics: true });
+  assert.deepEqual(defaultState(), { version: 1, value: 2, language: 'en' });
   assert.equal(defaultState('unsupported').language, 'en');
   const changed = defaultState('ru');
   changed.value = 19;
@@ -39,22 +39,22 @@ test('defaults are independent, validate language and tolerate absent or broken 
 test('all supported saved values round-trip and only validated fields survive', () => {
   for (const language of LANGUAGES) {
     for (let value = 0; value <= MAX_VALUE; value++) {
-      for (const haptics of [false, true]) {
-        const state = { version: 1, value, language, haptics };
-        assert.deepEqual(parseState(JSON.stringify({ ...state, unwanted: 'ignored' })), state);
-      }
+      const state = { version: 1, value, language };
+      assert.deepEqual(parseState(JSON.stringify({ ...state, unwanted: 'ignored' })), state);
+      // Old v1 records stay readable; retired preferences do not return on save.
+      for (const haptics of [false, true])
+        assert.deepEqual(parseState(JSON.stringify({ ...state, haptics })), state);
     }
   }
   assert.deepEqual(parseState('{"version":1,"value":0,"language":"xx","haptics":false}', 'ru'), {
     version: 1,
     value: 0,
     language: 'ru',
-    haptics: false,
   });
   for (const value of [-1, 20, 0.5, '19', null, true]) {
     assert.deepEqual(
       parseState(JSON.stringify({ version: 1, value, language: 'de', haptics: 'true' })),
-      { version: 1, value: 2, language: 'de', haptics: true },
+      { version: 1, value: 2, language: 'de' },
     );
   }
   assert.deepEqual(parseState('{"version":1,"__proto__":{"polluted":true}}'), defaultState());

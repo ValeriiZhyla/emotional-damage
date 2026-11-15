@@ -44,12 +44,9 @@ const instrument = document.querySelector('#instrument');
 const handle = document.querySelector('#handle');
 const zoneButtons = [...document.querySelectorAll('[data-zone]')];
 const saveNote = document.querySelector('#save-note');
-const hapticsInput = document.querySelector('#haptics');
-const supportsHaptics = typeof navigator.vibrate === 'function';
 let drag = null;
 let dragFrame = null;
 let pendingDragY = null;
-let lastTick = 0;
 
 // Centers of twenty equally sized steps keep five positions inside every zone.
 for (let index = 0; index <= MAX_VALUE; index++) {
@@ -102,31 +99,12 @@ function renderLanguage() {
   renderSaveNote();
 }
 
-function tick(previousValue) {
-  if (!supportsHaptics || !state.haptics || matchMedia('(prefers-reduced-motion: reduce)').matches)
-    return;
-  const now = performance.now();
-  if (now - lastTick < 35) return;
-  lastTick = now;
-  try {
-    navigator.vibrate(
-      Math.floor(previousValue / STEPS_PER_ZONE) === Math.floor(state.value / STEPS_PER_ZONE)
-        ? 6
-        : 12,
-    );
-  } catch {
-    /* Vibration is optional, including when disabled by device policy. */
-  }
-}
-
 function setValue(value) {
   const next = Math.max(0, Math.min(MAX_VALUE, Math.round(value)));
   if (!Number.isFinite(next) || next === state.value) return;
-  const previous = state.value;
   state.value = next;
   renderValue();
   saveState();
-  tick(previous);
 }
 
 function renderDrag(clientY) {
@@ -274,12 +252,6 @@ for (const radio of document.querySelectorAll('[name="language"]')) {
     saveState();
   });
 }
-hapticsInput.addEventListener('change', () => {
-  state.haptics = hapticsInput.checked;
-  saveState();
-});
-document.querySelector('#haptics-option').hidden = !supportsHaptics;
-
 for (const [trigger, selector] of [
   ['#open-info', '#info-dialog'],
   ['#open-settings', '#settings-dialog'],
@@ -307,11 +279,9 @@ window.addEventListener('storage', (event) => {
   if (event.key !== STORAGE_KEY && event.key !== null) return;
   releaseDrag();
   state = readState();
-  hapticsInput.checked = state.haptics;
   renderLanguage();
 });
 
-hapticsInput.checked = state.haptics;
 renderLanguage();
 // Settle saved styles with startup transitions disabled before revealing the UI.
 handle.getBoundingClientRect();

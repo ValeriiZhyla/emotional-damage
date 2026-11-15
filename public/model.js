@@ -10,7 +10,6 @@ export function defaultState(language = 'en') {
     version: 1,
     value: DEFAULT_VALUE,
     language: LANGUAGES.includes(language) ? language : 'en',
-    haptics: true,
   };
 }
 
@@ -27,7 +26,6 @@ export function parseState(raw, language = 'en') {
   if (Number.isInteger(saved.value) && saved.value >= 0 && saved.value <= MAX_VALUE)
     state.value = saved.value;
   if (LANGUAGES.includes(saved.language)) state.language = saved.language;
-  if (typeof saved.haptics === 'boolean') state.haptics = saved.haptics;
   return state;
 }
 

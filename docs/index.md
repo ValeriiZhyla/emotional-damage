@@ -25,3 +25,4 @@
 | 0013   | [Approved heart gauge icon](0013-approved-heart-gauge-icon.md)                                     | Superseded by 0014                 |
 | 0014   | [Oil-painted heart gauge icon](0014-oil-painted-heart-gauge-icon.md)                               | Accepted                           |
 | 0015   | [Contextual Back and repository link](0015-contextual-back-and-repository-link.md)                 | Accepted                           |
+| 0016   | [Remove haptic feedback](0016-remove-haptic-feedback.md)                                           | Accepted                           |

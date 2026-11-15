@@ -52,7 +52,9 @@ existing cached copy, slow requests continue. Workers activate after old clients
 only older caches with this app's prefix. Existing localStorage stays untouched.
 
 State key: `emotional-damage.v1`; schema: `{ version: 1, value: 0..19,
-language: 'en'|'de'|'ru', haptics: boolean }`. There is no server-side user data.
+language: 'en'|'de'|'ru' }`. Older v1 records may also contain a retired
+`haptics` field, which is ignored and omitted on the next save. There is no
+server-side user data.
 Clearing website data clears it, and private browsing may make it temporary.
 Blocked or corrupted storage does not prevent gauge use.
 
