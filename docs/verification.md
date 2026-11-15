@@ -303,3 +303,23 @@ screenshots, CI and publication results are recorded on the fix PR.
   profile with German, value 14 and disabled haptics is prepared for retention
   verification. Final publication, public checks and health/resources are recorded
   on the PR. Physical iPhone/native host testing remains unavailable.
+
+## 2026-11-15: Soft heart app icon
+
+- Replaced the thin gauge illustration with a broad coral heart, rounded tip and
+  one quiet crease. The SVG is the source for opaque 180px iPhone, 192px and 512px
+  install icons; `npm run icons` regenerates all PNGs using the existing browser
+  dependency. Two exports have identical hashes. No runtime dependency is added.
+- Inspected 180px home-screen, 64px shortcut, 32px favicon and round-mask previews.
+  Pixel analysis places all colored artwork inside the centered 80%-diameter
+  maskable safe circle (maximum radius 203.25 of the allowed 204.8 at 512px).
+- Fourteen Node checks and six focused Chromium/WebKit/Firefox checks pass for
+  saved-first-paint restoration and complete offline reload. Additional probes
+  verify every versioned icon URL online and offline in all three engines,
+  advertised PNG dimensions, opaque backgrounds and no page errors.
+- Updated favicon, Apple touch icon and manifest discovery URLs to revision 2,
+  while keeping the app identity stable. Shell v15 precaches the updated artwork;
+  saved state and page interactions remain compatible. Decision 0012 documents
+  the choice. Exact-head review, full CI and public deployment/retention/health
+  evidence are recorded on the release PR. Native home-screen icon refresh is
+  controlled by the device and may require adding a new shortcut.
