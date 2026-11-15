@@ -54,4 +54,12 @@ Keep the storage key and version compatible unless a migration is deliberately
 introduced. Malformed or inaccessible storage must leave the app usable. Optional
 vibration, offline installation and embedded-browser bridges must fail harmlessly.
 
+## App icons
+
+Edit `public/icons/icon.svg`, then run `npm run icons` to export the opaque
+180px iPhone, 192px and 512px install icons. This uses the existing Playwright
+Chromium installation. Keep the silhouette inside the centered 80%-diameter
+circle so it survives platform masks. When the artwork changes, increment the
+icon discovery URL revision in HTML/manifest and the worker shell cache version.
+
 For hosting validation and release procedures, see [operations](deployment.md).

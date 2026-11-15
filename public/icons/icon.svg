@@ -1,1 +1,24 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="64" fill="#101010"/><path d="M256 110v292" stroke="#777" stroke-width="12" stroke-linecap="round"/><path d="M212 168h88m-88 88h88m-88 88h88" stroke="#666" stroke-width="5" stroke-linecap="round"/><rect x="166" y="207" width="180" height="98" rx="14" fill="#242424" stroke="#777" stroke-width="3"/><path d="M242 240v32m14-32v32m14-32v32" stroke="#ddd" stroke-width="5" stroke-linecap="round"/><path d="M256 130c-10-10-35-23-35-41 0-16 22-21 35-4 13-17 35-12 35 4 0 18-25 31-35 41Z" fill="#97c77b"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <title>Emotional Damage — soft heart</title>
+  <defs>
+    <linearGradient id="coral" x1="256" y1="100" x2="256" y2="432" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ed9195" />
+      <stop offset="1" stop-color="#dc7583" />
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" fill="#101010" />
+  <g transform="translate(256 270) scale(.98) translate(-256 -256)">
+    <path
+      d="M255 156C220 112 176 87 130 105 75 126 53 174 63 223c13 60 80 126 161 189 19 15 35 27 54 14 72-49 145-111 169-168 23-54 6-111-38-141-44-30-102-15-131 22l-13 16q-5 8-10 1Z"
+      fill="url(#coral)"
+    />
+    <path
+      d="M258 158c18 26 23 45 16 66"
+      fill="none"
+      stroke="#a1485b"
+      stroke-opacity=".32"
+      stroke-width="11"
+      stroke-linecap="round"
+    />
+  </g>
+</svg>

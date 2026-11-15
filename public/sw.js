@@ -1,4 +1,4 @@
-const CACHE = 'emotional-damage-shell-v14';
+const CACHE = 'emotional-damage-shell-v15';
 const SHELL = [
   '/',
   '/index.html',
