@@ -26,8 +26,7 @@ the desktop falloff without a raster asset or dependency.
 
 Remove the position-14 orange anchor so positions 9–15 blend from warm amber
 through coral to the existing first red at 15. Retain both endpoints and every
-Exhausted tick's red. No adjacent saved tick changes an RGB channel by more than
-14. During dragging, interpolate the visual accent at the fractional position,
+Exhausted tick's red. No adjacent saved tick changes an RGB channel by more than 14. During dragging, interpolate the visual accent at the fractional position,
 alongside the existing continuous handle movement. Saved and accessible values
 remain twenty discrete ticks; on release, restore the tick's matching accent.
 The question, handle outline/tint, active label/dot and glow share one accent.

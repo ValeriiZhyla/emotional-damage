@@ -281,3 +281,25 @@ screenshots, CI and publication results are recorded on the fix PR.
   disabled haptics is prepared. Final full local/CI results, exact-head review,
   public colour/gesture/startup/offline checks, retention and health/resource
   observations are recorded on the PR before/after deployment as appropriate.
+
+## 2026-11-15: Public repository review
+
+- Reviewed the complete app and deployment configuration, Git history, PR content,
+  Actions logs and development dependencies. Concrete findings, scope and audit
+  evidence are in the [review report](reviews/2026-11-15-public-readiness.md).
+- Reproduced and fixed invisible startup failures, incomplete offline fallback
+  and interrupted drags overwriting newer input. Added focused regression tests,
+  small pure model/catalog modules, readable formatting and Firefox coverage.
+- Fourteen Node tests pass with 100% line/function and 98.28% branch coverage of
+  the model, catalog and worker. Real browser fault-server probes pass in all
+  three engines for HTTP 503 and stalled network responses. Six mobile/desktop
+  captures at green, coral and red are pixel-identical to the previous release.
+- The expanded browser run exposed a test timeout from grouping all languages
+  and eighteen dialog openings together. Parameterizing by language preserves
+  the checks with separate, more useful failure reports. Final full local and CI
+  counts are recorded on the release PR.
+- Added the owner-selected MIT license, development guide and decision 0011.
+  Offline shell advances to v14, including both new modules. A public v13 WebKit
+  profile with German, value 14 and disabled haptics is prepared for retention
+  verification. Final publication, public checks and health/resources are recorded
+  on the PR. Physical iPhone/native host testing remains unavailable.

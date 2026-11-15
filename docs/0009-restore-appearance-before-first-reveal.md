@@ -1,6 +1,6 @@
 # Restore appearance before first reveal
 
-Status: Accepted
+Status: Accepted; failure recovery extended by [0011](0011-public-repository-readiness.md)
 
 Date: 2026-11-14
 

@@ -16,16 +16,21 @@ in sync with translations; see decision 0005 for the copy conventions and source
 
 - `public/`: buildless, dependency-free browser app. Blocking `boot.js` marks the
   startup phase before styles/body paint; `app.js` restores and reveals the UI.
-  It owns translations, gauge input, optional haptics, dialogs and validated
-  browser-local persistence.
+  It owns gauge input, optional haptics, dialogs and browser-local persistence.
+  `model.js` owns pure state validation, scale geometry and colour rules;
+  `translations.js` owns the EN/DE/RU catalog. `boot.js` shows a localized retry
+  view if module loading or initialization fails.
 - `public/sw.js`: offline shell only. Bump its cache version whenever cached
-  assets change. Never cache unrelated paths or user data.
+  assets change. Never cache unrelated paths or user data. Network/HTTP errors
+  and a two-second network deadline may use an existing cached response; without
+  cache, allow a slow first request to finish.
 - `public/icons/`: code-native SVG and rasterized home-screen icons.
 - `Caddyfile`: static server on 8080 and loopback readiness on 8081. No admin API.
 - `compose.yaml`: pinned image, read-only unprivileged server, external `proxy`
   network alias `emotional-damage`, no host ports, health and resource limits.
 - `scripts/`: validation, repeatable deployment and public verification.
-- `tests/`, `playwright.config.js`: Chromium and mobile WebKit functional checks.
+- `tests/`, `playwright.config.js`: Node unit tests and Chromium, mobile WebKit
+  and Firefox functional checks. Prettier enforces readable source formatting.
 - `.github/workflows/checks.yml`: browser tests and deployment config validation.
 - `docs/`: indexed decisions, operating procedures and dated verification.
 
@@ -54,7 +59,9 @@ in sync with translations; see decision 0005 for the copy conventions and source
 - During dragging, follow the latest pointer position once per display frame
   without position easing; preserve the initial contact offset on the handle.
   Keep saved/accessibility values discrete, and settle visually onto a tick on
-  release/cancellation. Cancel pending frames when a gesture ends.
+  release/cancellation. Cancel pending frames when a gesture ends. Finish before
+  keyboard/native input, zone selection, modal opening or page interruption.
+  Release without saving old coordinates when another tab replaces/removes state.
 - Protect the whole instrument, including endpoint drawings and surrounding blank
   space, against touch panning from touchstart. Blank space can begin a captured
   slider drag; a 24px margin around the handle preserves the initial grab offset.
@@ -77,7 +84,7 @@ in sync with translations; see decision 0005 for the copy conventions and source
   locale. Suppress transitions during startup and flush restored layout before
   revealing the app; keep normal movement transitions afterward. Cache boot.js
   with the offline shell. Without JavaScript, retain the static/noscript fallback.
-  See decision 0009.
+  See decisions 0009 and 0011; failed initialization must offer Retry and Back.
 - Preserve administrator access and other applications. The shared ingress in
   `../personal-infra/` owns TLS and the homepage. Read its `AGENTS.md` before edits.
 - No persistent server volume is needed: state belongs to each browser/device.
@@ -93,7 +100,7 @@ head, checks and any reused evidence on the PR. Resolve blockers and pass CI
 before merging/deploying. Review with the current subscription-authenticated
 agent; no separate reviewer or AI API job unless requested.
 
-Run `npm ci`, `npm run check`, `npm test` (Chromium and WebKit), and
+Run `npm ci`, `npm run check`, `npm test` (Node unit tests and all three browser engines), and
 `sudo ./scripts/validate.sh` for relevant changes. Validate before deployment;
 verify real HTTPS, functionality, persistence and existing infra health afterward.
 Use `scripts/deploy.sh` so Caddyfile changes trigger recreation through its config
