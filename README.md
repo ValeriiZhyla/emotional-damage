@@ -7,6 +7,9 @@ right answer.
 
 <p>
   <img src="docs/images/preview.png" width="600" alt="Desktop layout with a warm glow and the gauge set to Tired." />
+</p>
+
+<p align="center">
   <img src="docs/images/mobile.png" width="220" alt="Phone layout with a green glow and the gauge set to Okay." />
 </p>
 
