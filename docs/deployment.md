@@ -30,13 +30,8 @@ admin API and automatic HTTPS are disabled because the shared ingress owns TLS.
 
 ## Development and verification
 
-```bash
-npm ci --ignore-scripts --no-audit --no-fund
-npx playwright install chromium webkit
-npm run check
-npm test
-npm run preview
-```
+For local requirements, commands and module boundaries, see
+[development](development.md).
 
 Preview binds only `127.0.0.1:18123`. Playwright starts/stops its own preview when
 `APP_URL` is unset. `APP_URL=https://stress.valeriizhyla.com npm test` checks the
@@ -52,7 +47,8 @@ for any routing/homepage changes.
 
 Increment `CACHE` in `public/sw.js` whenever any `SHELL` asset changes. The worker
 precaches a complete app and uses the network when available, with a cached
-fallback offline. Workers activate after old clients close; activation removes
+fallback for network/HTTP errors or a two-second network deadline. Without an
+existing cached copy, slow requests continue. Workers activate after old clients close; activation removes
 only older caches with this app's prefix. Existing localStorage stays untouched.
 
 State key: `emotional-damage.v1`; schema: `{ version: 1, value: 0..19,

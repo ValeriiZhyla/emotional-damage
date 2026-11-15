@@ -6,11 +6,19 @@
   "type": "module",
   "scripts": {
     "preview": "python3 -m http.server 18123 --bind 127.0.0.1 --directory public",
-    "check": "node --check public/boot.js && node --check public/app.js && node --check public/sw.js && node --check tests/app.spec.js",
-    "test": "playwright test"
+    "check": "prettier --check . && node --check public/boot.js && node --check public/app.js && node --check public/sw.js && node --check tests/app.spec.js",
+    "test": "npm run test:unit && playwright test",
+    "format": "prettier --write .",
+    "test:unit": "node --test --experimental-test-coverage --test-coverage-include=\"public/**\" tests/model.test.js tests/sw.test.js",
+    "test:browser": "playwright test"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.14.0",
-    "@playwright/test": "1.65.0"
+    "@playwright/test": "1.65.0",
+    "prettier": "3.10.1"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=24"
   }
 }

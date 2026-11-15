@@ -1,108 +1,259 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#101010">
-  <meta name="color-scheme" content="dark">
-  <meta name="description" content="A simple gauge to check in with yourself. Four levels, from okay to exhausted. Saved on your device.">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="Emotional Damage">
-  <title>Emotional Damage</title>
-  <link rel="canonical" href="https://stress.valeriizhyla.com/">
-  <link rel="icon" href="/icons/icon.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
-  <link rel="manifest" href="/manifest.webmanifest">
-  <script src="/boot.js"></script>
-  <link rel="stylesheet" href="/style.css">
-  <script src="/app.js" type="module"></script>
-</head>
-<body>
-  <div class="app">
-    <header class="toolbar">
-      <a class="icon-button" id="back" href="https://valeriizhyla.com" aria-label="Back">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14 6-6 6 6 6M8 12h12"/></svg>
-      </a>
-      <span class="wordmark" aria-label="Emotional Damage">emotional<br>damage<span class="wordmark-dot">.</span></span>
-      <div class="toolbar-actions">
-        <button class="icon-button" id="open-info" type="button" aria-label="About this gauge" aria-haspopup="dialog">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v6M12 7.5v.1"/></svg>
-        </button>
-        <button class="icon-button" id="open-settings" type="button" aria-label="Settings" aria-haspopup="dialog">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9.5 2.5-.6 2.3-1.5.9-2.3-.6-2.5 4.3 1.7 1.7v1.8l-1.7 1.7 2.5 4.3 2.3-.6 1.5.9.6 2.3h5l.6-2.3 1.5-.9 2.3.6 2.5-4.3-1.7-1.7v-1.8l1.7-1.7-2.5-4.3-2.3.6-1.5-.9-.6-2.3Z"/><circle cx="12" cy="12" r="3"/></svg>
-        </button>
-      </div>
-    </header>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#101010" />
+    <meta name="color-scheme" content="dark" />
+    <meta
+      name="description"
+      content="A simple gauge to check in with yourself. Four levels, from okay to exhausted. Saved on your device."
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-mobile-web-app-title" content="Emotional Damage" />
+    <title>Emotional Damage</title>
+    <link rel="canonical" href="https://stress.valeriizhyla.com/" />
+    <link rel="icon" href="/icons/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <script src="/boot.js"></script>
+    <link rel="stylesheet" href="/style.css" />
+    <script src="/app.js" type="module"></script>
+  </head>
+  <body>
+    <div class="app">
+      <header class="toolbar">
+        <a class="icon-button" id="back" href="https://valeriizhyla.com" aria-label="Back">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14 6-6 6 6 6M8 12h12" /></svg>
+        </a>
+        <span class="wordmark" aria-label="Emotional Damage"
+          >emotional<br />damage<span class="wordmark-dot">.</span></span
+        >
+        <div class="toolbar-actions">
+          <button
+            class="icon-button"
+            id="open-info"
+            type="button"
+            aria-label="About this gauge"
+            aria-haspopup="dialog"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="12" r="8.5" />
+              <path d="M12 11v6M12 7.5v.1" />
+            </svg>
+          </button>
+          <button
+            class="icon-button"
+            id="open-settings"
+            type="button"
+            aria-label="Settings"
+            aria-haspopup="dialog"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="m9.5 2.5-.6 2.3-1.5.9-2.3-.6-2.5 4.3 1.7 1.7v1.8l-1.7 1.7 2.5 4.3 2.3-.6 1.5.9.6 2.3h5l.6-2.3 1.5-.9 2.3.6 2.5-4.3-1.7-1.7v-1.8l1.7-1.7-2.5-4.3-2.3.6-1.5-.9-.6-2.3Z"
+              />
+              <circle cx="12" cy="12" r="3" />
+            </svg>
+          </button>
+        </div>
+      </header>
 
-    <main>
-      <div class="introduction">
-        <p class="eyebrow" data-i18n="eyebrow">A MOMENT FOR YOURSELF</p>
-        <h1><span data-i18n="question">How are you,</span><br><em data-i18n="really">really?</em></h1>
-      </div>
-
-      <section class="instrument" aria-label="Emotional stress gauge" id="instrument">
-        <div class="end-symbol heart" aria-hidden="true">
-          <svg viewBox="0 0 64 56"><path d="M32 48C25 41 8 31 8 19 8 7 23 3 32 16 41 3 56 7 56 19c0 12-17 22-24 29Z"/><path class="sketch" d="m19 18-2 9m9-11-5 19m13-14-6 21m15-25-7 22m12-17-4 11"/></svg>
+      <main>
+        <div class="load-error" id="load-error" role="alert" hidden>
+          <p id="load-error-message">Couldn’t load the gauge. Please try again.</p>
+          <button type="button" id="retry-load">Try again</button>
+        </div>
+        <div class="introduction">
+          <p class="eyebrow" data-i18n="eyebrow">A MOMENT FOR YOURSELF</p>
+          <h1>
+            <span data-i18n="question">How are you,</span><br /><em data-i18n="really">really?</em>
+          </h1>
         </div>
 
-        <div class="gauge" id="gauge">
-          <div class="zones" id="zones">
-            <button class="zone selected" type="button" data-zone="0" aria-pressed="true"><span class="zone-dot"></span><span class="zone-copy"><span class="zone-title" data-i18n="zone0">Okay</span><span class="zone-caption" data-i18n="caption0">Room to breathe</span></span></button>
-            <button class="zone" type="button" data-zone="1" aria-pressed="false"><span class="zone-dot"></span><span class="zone-copy"><span class="zone-title" data-i18n="zone1">Tired</span><span class="zone-caption" data-i18n="caption1">Running a little low</span></span></button>
-            <button class="zone" type="button" data-zone="2" aria-pressed="false"><span class="zone-dot"></span><span class="zone-copy"><span class="zone-title" data-i18n="zone2">Overloaded</span><span class="zone-caption" data-i18n="caption2">Everything feels a bit much</span></span></button>
-            <button class="zone" type="button" data-zone="3" aria-pressed="false"><span class="zone-dot"></span><span class="zone-copy"><span class="zone-title" data-i18n="zone3">Exhausted</span><span class="zone-caption" data-i18n="caption3">Very little energy left</span></span></button>
+        <section class="instrument" aria-label="Emotional stress gauge" id="instrument">
+          <div class="end-symbol heart" aria-hidden="true">
+            <svg viewBox="0 0 64 56">
+              <path d="M32 48C25 41 8 31 8 19 8 7 23 3 32 16 41 3 56 7 56 19c0 12-17 22-24 29Z" />
+              <path class="sketch" d="m19 18-2 9m9-11-5 19m13-14-6 21m15-25-7 22m12-17-4 11" />
+            </svg>
           </div>
-          <div class="ruler" id="ruler" aria-hidden="true">
-            <div class="rail"></div>
-            <div class="ticks" id="ticks"></div>
-            <div class="divider divider-one"></div>
-            <div class="divider divider-two"></div>
-            <div class="divider divider-three"></div>
-            <div class="handle" id="handle"><span></span><span></span><span></span></div>
+
+          <div class="gauge" id="gauge">
+            <div class="zones" id="zones">
+              <button class="zone selected" type="button" data-zone="0" aria-pressed="true">
+                <span class="zone-dot"></span
+                ><span class="zone-copy"
+                  ><span class="zone-title" data-i18n="zone0">Okay</span
+                  ><span class="zone-caption" data-i18n="caption0">Room to breathe</span></span
+                >
+              </button>
+              <button class="zone" type="button" data-zone="1" aria-pressed="false">
+                <span class="zone-dot"></span
+                ><span class="zone-copy"
+                  ><span class="zone-title" data-i18n="zone1">Tired</span
+                  ><span class="zone-caption" data-i18n="caption1">Running a little low</span></span
+                >
+              </button>
+              <button class="zone" type="button" data-zone="2" aria-pressed="false">
+                <span class="zone-dot"></span
+                ><span class="zone-copy"
+                  ><span class="zone-title" data-i18n="zone2">Overloaded</span
+                  ><span class="zone-caption" data-i18n="caption2"
+                    >Everything feels a bit much</span
+                  ></span
+                >
+              </button>
+              <button class="zone" type="button" data-zone="3" aria-pressed="false">
+                <span class="zone-dot"></span
+                ><span class="zone-copy"
+                  ><span class="zone-title" data-i18n="zone3">Exhausted</span
+                  ><span class="zone-caption" data-i18n="caption3"
+                    >Very little energy left</span
+                  ></span
+                >
+              </button>
+            </div>
+            <div class="ruler" id="ruler" aria-hidden="true">
+              <div class="rail"></div>
+              <div class="ticks" id="ticks"></div>
+              <div class="divider divider-one"></div>
+              <div class="divider divider-two"></div>
+              <div class="divider divider-three"></div>
+              <div class="handle" id="handle"><span></span><span></span><span></span></div>
+            </div>
+            <label class="sr-only" for="stress" data-i18n="gaugeLabel"
+              >How stressed do you feel right now?</label
+            >
+            <input
+              type="range"
+              id="stress"
+              class="gauge-input"
+              min="0"
+              max="19"
+              step="1"
+              value="2"
+              orient="vertical"
+              aria-orientation="vertical"
+              aria-valuetext="Okay, position 3 of 5"
+              aria-describedby="drag-hint"
+            />
           </div>
-          <label class="sr-only" for="stress" data-i18n="gaugeLabel">How stressed do you feel right now?</label>
-          <input type="range" id="stress" class="gauge-input" min="0" max="19" step="1" value="2" orient="vertical" aria-orientation="vertical" aria-valuetext="Okay, position 3 of 5" aria-describedby="drag-hint">
-        </div>
 
-        <div class="end-symbol skull" aria-hidden="true">
-          <svg viewBox="0 0 64 60"><path d="m12 43 39 12M13 55l39-12M11 40l-3 1 1 4m42 7 4 1-1 4M12 52l-4 1 1 4m43-17 3 1-1 4"/><path d="M19 30c-5-3-5-9-3-15C19 3 45 2 49 15c2 7 1 12-4 15l-1 9H21Z"/><path d="m25 29 3 3 3-3m0 3 3-3 3 3M29 37v3m7-3v3"/><ellipse cx="25" cy="21" rx="3" ry="4"/><ellipse cx="40" cy="21" rx="3" ry="4"/></svg>
-        </div>
-      </section>
+          <div class="end-symbol skull" aria-hidden="true">
+            <svg viewBox="0 0 64 60">
+              <path
+                d="m12 43 39 12M13 55l39-12M11 40l-3 1 1 4m42 7 4 1-1 4M12 52l-4 1 1 4m43-17 3 1-1 4"
+              />
+              <path d="M19 30c-5-3-5-9-3-15C19 3 45 2 49 15c2 7 1 12-4 15l-1 9H21Z" />
+              <path d="m25 29 3 3 3-3m0 3 3-3 3 3M29 37v3m7-3v3" />
+              <ellipse cx="25" cy="21" rx="3" ry="4" />
+              <ellipse cx="40" cy="21" rx="3" ry="4" />
+            </svg>
+          </div>
+        </section>
 
-      <footer class="check-in-footer">
-        <p class="drag-hint" id="drag-hint"><svg viewBox="0 0 18 22" aria-hidden="true"><path d="M9 2v18M5 6l4-4 4 4M5 16l4 4 4-4"/></svg><span data-i18n="dragHint">Move it to match how you feel.</span></p>
-        <p class="quiet-note" id="save-note" data-i18n="quietNote">Just for you. No judgment.</p>
-      </footer>
-      <noscript><p class="noscript">Enable JavaScript to use the gauge. / Aktiviere JavaScript, um die Skala zu nutzen. / Включи JavaScript, чтобы пользоваться шкалой.</p></noscript>
-    </main>
-  </div>
-
-  <dialog class="sheet" id="info-dialog" aria-labelledby="info-title">
-    <div class="sheet-header"><h2 id="info-title" data-i18n="infoTitle" tabindex="-1" autofocus>How it works</h2><button class="icon-button close-dialog" type="button" aria-label="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div>
-    <p class="sheet-intro" data-i18n="infoIntro">Move the marker to match how you feel. There’s no right answer.</p>
-    <div class="level-guide">
-      <section><h3><span class="guide-dot dot-0"></span><span data-i18n="zone0">Okay</span></h3><p data-i18n="description0">You have energy, can focus, and enjoy spending time with others.</p></section>
-      <section><h3><span class="guide-dot dot-1"></span><span data-i18n="zone1">Tired</span></h3><p data-i18n="description1">Focusing takes effort. You want to finish for the day, but still enjoy other things.</p></section>
-      <section><h3><span class="guide-dot dot-2"></span><span data-i18n="zone2">Overloaded</span></h3><p data-i18n="description2">Small things irritate you. Tasks stay on your mind, and socializing feels like work.</p></section>
-      <section><h3><span class="guide-dot dot-3"></span><span data-i18n="zone3">Exhausted</span></h3><p data-i18n="description3">Even things you enjoy feel draining. Small tasks take effort; you may want to be alone.</p></section>
+        <footer class="check-in-footer">
+          <p class="drag-hint" id="drag-hint">
+            <svg viewBox="0 0 18 22" aria-hidden="true">
+              <path d="M9 2v18M5 6l4-4 4 4M5 16l4 4 4-4" /></svg
+            ><span data-i18n="dragHint">Move it to match how you feel.</span>
+          </p>
+          <p class="quiet-note" id="save-note" data-i18n="quietNote">Just for you. No judgment.</p>
+        </footer>
+        <noscript
+          ><p class="noscript">
+            Enable JavaScript to use the gauge. / Aktiviere JavaScript, um die Skala zu nutzen. /
+            Включи JavaScript, чтобы пользоваться шкалой.
+          </p></noscript
+        >
+      </main>
     </div>
-    <p class="sheet-footnote" data-i18n="infoFootnote">The descriptions are a rough guide, not a test or medical advice.</p>
-  </dialog>
 
-  <dialog class="sheet" id="settings-dialog" aria-labelledby="settings-title">
-    <div class="sheet-header"><h2 id="settings-title" data-i18n="settingsTitle" tabindex="-1" autofocus>Settings</h2><button class="icon-button close-dialog" type="button" aria-label="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div>
-    <fieldset class="language-options"><legend data-i18n="languageLabel">Language</legend>
-      <div class="language-choices">
-        <label><input type="radio" name="language" value="en" checked><span lang="en">English</span></label>
-        <label><input type="radio" name="language" value="de"><span lang="de">Deutsch</span></label>
-        <label><input type="radio" name="language" value="ru"><span lang="ru">Русский</span></label>
+    <dialog class="sheet" id="info-dialog" aria-labelledby="info-title">
+      <div class="sheet-header">
+        <h2 id="info-title" data-i18n="infoTitle" tabindex="-1" autofocus>How it works</h2>
+        <button class="icon-button close-dialog" type="button" aria-label="Close">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" /></svg>
+        </button>
       </div>
-    </fieldset>
-    <label class="haptics-option" id="haptics-option" hidden><span><span class="preference-label" data-i18n="hapticsLabel">Haptic feedback</span><span class="preference-caption" data-i18n="hapticsCaption">A light vibration as you move the marker.</span></span><input type="checkbox" id="haptics" role="switch" checked></label>
-    <p class="privacy-note" data-i18n="privacyNote">Your last position and settings are saved only in this browser on this device. No account or tracking.</p>
-    <p class="storage-note" data-i18n="storageNote">Clearing site data also removes your saved position and settings.</p>
-    <p class="install-note" data-i18n="installNote">On iPhone, open this page in Safari: “Share” → “Add to Home Screen”. After the first online visit, the gauge also works offline.</p>
-  </dialog>
-</body>
+      <p class="sheet-intro" data-i18n="infoIntro">
+        Move the marker to match how you feel. There’s no right answer.
+      </p>
+      <div class="level-guide">
+        <section>
+          <h3><span class="guide-dot dot-0"></span><span data-i18n="zone0">Okay</span></h3>
+          <p data-i18n="description0">
+            You have energy, can focus, and enjoy spending time with others.
+          </p>
+        </section>
+        <section>
+          <h3><span class="guide-dot dot-1"></span><span data-i18n="zone1">Tired</span></h3>
+          <p data-i18n="description1">
+            Focusing takes effort. You want to finish for the day, but still enjoy other things.
+          </p>
+        </section>
+        <section>
+          <h3><span class="guide-dot dot-2"></span><span data-i18n="zone2">Overloaded</span></h3>
+          <p data-i18n="description2">
+            Small things irritate you. Tasks stay on your mind, and socializing feels like work.
+          </p>
+        </section>
+        <section>
+          <h3><span class="guide-dot dot-3"></span><span data-i18n="zone3">Exhausted</span></h3>
+          <p data-i18n="description3">
+            Even things you enjoy feel draining. Small tasks take effort; you may want to be alone.
+          </p>
+        </section>
+      </div>
+      <p class="sheet-footnote" data-i18n="infoFootnote">
+        The descriptions are a rough guide, not a test or medical advice.
+      </p>
+    </dialog>
+
+    <dialog class="sheet" id="settings-dialog" aria-labelledby="settings-title">
+      <div class="sheet-header">
+        <h2 id="settings-title" data-i18n="settingsTitle" tabindex="-1" autofocus>Settings</h2>
+        <button class="icon-button close-dialog" type="button" aria-label="Close">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" /></svg>
+        </button>
+      </div>
+      <fieldset class="language-options">
+        <legend data-i18n="languageLabel">Language</legend>
+        <div class="language-choices">
+          <label
+            ><input type="radio" name="language" value="en" checked /><span lang="en"
+              >English</span
+            ></label
+          >
+          <label
+            ><input type="radio" name="language" value="de" /><span lang="de">Deutsch</span></label
+          >
+          <label
+            ><input type="radio" name="language" value="ru" /><span lang="ru">Русский</span></label
+          >
+        </div>
+      </fieldset>
+      <label class="haptics-option" id="haptics-option" hidden
+        ><span
+          ><span class="preference-label" data-i18n="hapticsLabel">Haptic feedback</span
+          ><span class="preference-caption" data-i18n="hapticsCaption"
+            >A light vibration as you move the marker.</span
+          ></span
+        ><input type="checkbox" id="haptics" role="switch" checked
+      /></label>
+      <p class="privacy-note" data-i18n="privacyNote">
+        Your last position and settings are saved only in this browser on this device. No account or
+        tracking.
+      </p>
+      <p class="storage-note" data-i18n="storageNote">
+        Clearing site data also removes your saved position and settings.
+      </p>
+      <p class="install-note" data-i18n="installNote">
+        On iPhone, open this page in Safari: “Share” → “Add to Home Screen”. After the first online
+        visit, the gauge also works offline.
+      </p>
+    </dialog>
+  </body>
 </html>
