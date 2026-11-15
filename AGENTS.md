@@ -24,11 +24,12 @@ in sync with translations; see decision 0005 for the copy conventions and source
   assets change. Never cache unrelated paths or user data. Network/HTTP errors
   and a two-second network deadline may use an existing cached response; without
   cache, allow a slow first request to finish.
-- `public/icons/`: one soft coral heart on charcoal, shared by the favicon and
-  install icons. `npm run icons` exports opaque PNGs from the editable SVG using
-  the existing development browser. Keep important artwork inside the centered
-  80%-diameter safe circle; revision icon URLs and shell cache when it changes.
-  See decision 0012.
+- `assets/heart-gauge.png`: the approved master image, outside public hosting.
+  `public/icons/` contains its PNG favicon and install exports. `npm run icons`
+  preserves that artwork using the existing development browser. Standard icons
+  retain its composition; the separate maskable export keeps the emblem inside
+  the centered 80%-diameter safe circle. Revision discovery URLs and shell cache
+  when artwork changes. See decision 0013.
 - `Caddyfile`: static server on 8080 and loopback readiness on 8081. No admin API.
 - `compose.yaml`: pinned image, read-only unprivileged server, external `proxy`
   network alias `emotional-damage`, no host ports, health and resource limits.

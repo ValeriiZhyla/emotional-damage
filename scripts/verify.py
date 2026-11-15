@@ -34,7 +34,7 @@ def main():
     assert headers.get("Referrer-Policy") == "no-referrer"
     assert "max-age=" in headers.get("Strict-Transport-Security", "")
     print("PASS HTTPS, HTTP redirect, four-zone app and security headers")
-    for path, mime in (("/boot.js", "javascript"), ("/style.css", "text/css"), ("/app.js", "javascript"), ("/model.js", "javascript"), ("/translations.js", "javascript"), ("/sw.js", "javascript"), ("/manifest.webmanifest", "application/manifest+json"), ("/icons/icon.svg", "image/svg+xml"), ("/icons/icon-192.png", "image/png"), ("/icons/icon-512.png", "image/png"), ("/icons/apple-touch-icon.png", "image/png")):
+    for path, mime in (("/boot.js", "javascript"), ("/style.css", "text/css"), ("/app.js", "javascript"), ("/model.js", "javascript"), ("/translations.js", "javascript"), ("/sw.js", "javascript"), ("/manifest.webmanifest", "application/manifest+json"), ("/icons/icon-64.png", "image/png"), ("/icons/icon-maskable-512.png", "image/png"), ("/icons/icon-192.png", "image/png"), ("/icons/icon-512.png", "image/png"), ("/icons/apple-touch-icon.png", "image/png")):
         headers, body = fetch(ORIGIN + path)
         assert mime in headers.get("Content-Type", "") and body, path
         print(f"PASS {path}")

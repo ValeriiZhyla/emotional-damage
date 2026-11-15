@@ -323,3 +323,24 @@ screenshots, CI and publication results are recorded on the fix PR.
   the choice. Exact-head review, full CI and public deployment/retention/health
   evidence are recorded on the release PR. Native home-screen icon refresh is
   controlled by the device and may require adding a new shortcut.
+
+## 2026-11-15: Approved heart gauge icon
+
+- Adopted the selected generated preview with its original taller heart shape,
+  four coloured bands, ivory needle and gently rounded vertices. The master in
+  `assets/heart-gauge.png` is byte-identical to the approved image and stays outside
+  public hosting. Five PNG exports replace the retired SVG: 64px favicon, 180px
+  iPhone, 192px/512px general install icons and a padded 512px maskable icon.
+- Inspected 32/64/180px and circular-mask previews. Two exports have identical
+  hashes. Three-engine probes verify every revision-3 icon's exact hash, size and
+  opaque background online/offline, and confirm maskable art fits the centered
+  80%-diameter safe circle. The complete v16 shell contains thirteen public paths
+  and excludes the master image.
+- Fourteen unit tests and six focused Chromium/mobile WebKit/Firefox checks pass
+  for saved-first-paint restoration and offline reload. Formatting, Python syntax,
+  documentation links, whitespace and Compose/Caddy configuration are checked.
+  Full CI and exact-head review are required before merge.
+- Decision 0013 supersedes the earlier solid-heart artwork. Manifest identity and
+  localStorage schema are preserved. Public asset, previous-installation update,
+  saved-state, offline and health/resource evidence is recorded on the release PR.
+  Existing home-screen icon refresh remains controlled by the device.
