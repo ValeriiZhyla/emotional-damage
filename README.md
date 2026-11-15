@@ -5,12 +5,10 @@ right answer.
 
 **[Open the app](https://stress.valeriizhyla.com/)**
 
-<p>
-  <img src="docs/images/preview.png" width="600" alt="Desktop layout with a warm glow and the gauge set to Tired." />
-</p>
-
 <p align="center">
-  <img src="docs/images/mobile.png" width="220" alt="Phone layout with a green glow and the gauge set to Okay." />
+  <img src="docs/images/preview.png" width="72%" alt="Desktop layout with a warm glow and the gauge set to Tired." />
+  &nbsp;
+  <img src="docs/images/mobile.png" width="20.71%" alt="Phone layout with a green glow and the gauge set to Okay." />
 </p>
 
 - Four levels: Okay, Tired, Overloaded and Exhausted, with twenty positions.
