@@ -63,7 +63,7 @@ Whenever a file in `public/sw.js`’s `SHELL` list changes, increment `CACHE`.
 Include new offline assets in `SHELL`. Documentation and its images are outside
 `public/` and need no shell revision or server restart.
 
-## App icons and README image
+## App icons and README images
 
 `assets/heart-gauge.png` is the approved oil-painted master. After installing the
 tools above, run `npm run icons` to derive the 64px favicon, 180px iPhone icon,
@@ -72,6 +72,8 @@ approved source intact; the maskable export fits the centered 80%-diameter safe
 circle. After an artwork change, revise icon discovery URLs in HTML/manifest
 and the shell cache. The master is outside public hosting and precaching.
 
-The README image is `docs/images/preview.png`: the English desktop layout at
-1280×800 with sample position 7, captured without a focused control. Refresh it
-when the visible app changes; it is not a runtime asset.
+README screenshots use sample state and no focused control: `docs/images/preview.png`
+is the English desktop layout at 1280×800, position 7 (Tired); `docs/images/mobile.png`
+is the English mobile WebKit layout at 440×956, position 2 (Okay). The mobile
+capture is browser emulation, not a physical iPhone screenshot. Refresh both when
+the visible app changes; neither is a runtime asset.

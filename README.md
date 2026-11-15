@@ -5,7 +5,10 @@ right answer.
 
 **[Open the app](https://stress.valeriizhyla.com/)**
 
-![Emotional Damage: a dark, two-column layout with a warm glow and the gauge set to Tired.](docs/images/preview.png)
+<p>
+  <img src="docs/images/preview.png" width="600" alt="Desktop layout with a warm glow and the gauge set to Tired." />
+  <img src="docs/images/mobile.png" width="220" alt="Phone layout with a green glow and the gauge set to Okay." />
+</p>
 
 - Four levels: Okay, Tired, Overloaded and Exhausted, with twenty positions.
 - Drag the marker, tap a level, or focus the gauge and use the arrow keys.

@@ -42,7 +42,7 @@ in sync with translations; see decision 0005 for the copy conventions and source
   and Firefox functional checks. Prettier enforces readable source formatting.
 - `.github/workflows/checks.yml`: browser tests and deployment config validation.
 - `docs/`: current guides, indexed decisions and dated verification.
-  `docs/images/preview.png` is a documentation-only screenshot with sample state.
+  `docs/images/` contains documentation-only desktop/mobile screenshots with sample state.
   Historical reviews/decisions retain their evidence and link later supersessions;
   current setup belongs in the guides.
 
