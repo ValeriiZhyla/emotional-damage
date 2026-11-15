@@ -1,5 +1,11 @@
 # Public-readiness review — 2026-11-15
 
+Historical snapshot for [PR 14](https://github.com/ValeriiZhyla/emotional-damage/pull/14).
+Later changes make Back contextual ([0015](../0015-contextual-back-and-repository-link.md))
+and remove haptics ([0016](../0016-remove-haptic-feedback.md)). Counts, coverage
+and audit results below describe this reviewed revision. For current setup and
+release evidence, use the [documentation index](../index.md).
+
 Scope: the complete static app, state and localization contracts, input lifecycle,
 startup and offline behavior, accessibility/responsive regression suite, repository
 structure, deployment configuration, dependencies and existing publication history.

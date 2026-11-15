@@ -1,68 +1,77 @@
 # Development
 
-## Quick start
+## Preview
 
-Use Node.js 24 or newer and Python 3. There is no build step or runtime package.
-Python serves the static files locally; it is not an application backend.
+Follow [Run locally](../README.md#run-locally) for a Python-only preview. From the
+repository root, `npm run preview` is a convenience wrapper for the same server
+if Node.js is already installed. Neither preview command needs npm packages.
+
+Open `http://127.0.0.1:18123`, rather than opening `index.html` as a file. Browser
+storage belongs to that origin, separately from the public site. Changing the
+hostname or port creates a separate saved position and language.
+
+## Set up the development tools
+
+Use Node.js 24 or newer and Python 3. From the repository root:
 
 ```bash
 npm ci --ignore-scripts --no-audit --no-fund
 npx playwright install --with-deps chromium webkit firefox
-npm run preview
 ```
 
-Open `http://127.0.0.1:18123`. Browser storage and offline installation belong to
-that origin, independently of the public website. Service workers require HTTPS
-or localhost. Serve `public/` at the origin root; asset and worker paths are absolute.
+The npm packages and browser downloads are for checks and icon generation, not
+for serving the app. On Linux, `--with-deps` may need administrator access to
+install browser system dependencies. Repeat the browser install after updating
+Playwright so its browser binaries match the locked package version.
 
-## Making changes
+## Check changes
 
 ```bash
-npm run format
 npm run check
 npm test
 ```
 
-Prettier keeps source and documentation readable. Tests use Node's built-in runner
-for pure rules and the worker, then Playwright for Chromium, mobile WebKit and
-Firefox. Playwright starts its own loopback preview when needed. To run only one
-layer, use `npm run test:unit` or `npm run test:browser`.
+`npm run check` checks formatting and JavaScript syntax. Use `npm run format` to
+rewrite formatting after editing. `npm test` runs Node unit tests followed by
+Playwright in Chromium, mobile WebKit and Firefox. Run one layer with
+`npm run test:unit` or `npm run test:browser`.
 
-The browser suite covers all twenty positions, input handover and cancellation,
-localization, storage failures and cross-tab updates, first-paint restoration,
-failed initialization, dialogs, responsive layout, offline reload and automated
-WCAG A/AA checks. Engine-specific native touch tests are explicitly skipped where
-the necessary browser APIs are unavailable. Emulation does not exercise a native
-Telegram/ChatGPT sheet or home-screen installation on an iPhone.
+Playwright starts and stops a loopback preview. Outside CI, it can reuse a server
+already listening on port 18123: stop a preview from another checkout before
+running tests. Set `APP_URL` to use an explicit origin instead of starting one;
+see [deployed verification](deployment.md#verification).
+
+The browser suite covers twenty positions, input handover/cancellation,
+localization, storage failures and cross-tab updates, saved appearance on first
+paint, startup failures, dialogs, responsive layout, offline reload and automated
+WCAG A/AA checks. Engine-specific touch cases are skipped where the necessary
+APIs are unavailable. Mobile WebKit emulation does not reproduce an iPhone’s
+home-screen installation or Telegram/ChatGPT’s native browser sheets.
 Unit coverage measures the model, catalog and worker; it is not whole-app coverage.
 
-## Module boundaries
+## Editing the app
 
-- `public/model.js` exports state defaults/validation, scale constants, position
-  geometry and accent interpolation. It has no DOM, storage or network effects.
-- `public/translations.js` exports the EN/DE/RU catalog. English HTML fallbacks
-  must match; tests check keys, types and fallback text.
-- `public/app.js` owns the DOM, input gestures, dialogs and localStorage. A remote storage update releases old pointer ownership before
-  rendering the new state.
-- `public/boot.js` hides unsaved defaults before paint. After initialization the
-  app reveals itself; a failed module load or initialization shows a retry view.
-- `public/sw.js` owns only the offline static shell. Include new assets in `SHELL`
-  and increment its cache version whenever a cached file changes.
+See [AGENTS.md](../AGENTS.md) for the file map, responsibilities and implementation
+rules. Keep English HTML fallback text in sync with the EN/DE/RU catalog.
 
-Keep the storage key and version compatible unless a migration is deliberately
-introduced. Old v1 records containing a haptic preference remain readable; ignore
-that retired field and omit it from subsequent saves. Malformed or inaccessible
-storage must leave the app usable. Offline installation and embedded-browser
-bridges must fail harmlessly.
+Keep the storage key and version compatible unless deliberately introducing a
+migration. Old v1 records may contain a retired haptic preference; ignore it and
+omit it on subsequent saves. Malformed or inaccessible storage must leave the
+gauge usable.
 
-## App icons
+Whenever a file in `public/sw.js`’s `SHELL` list changes, increment `CACHE`.
+Include new offline assets in `SHELL`. Documentation and its images are outside
+`public/` and need no shell revision or server restart.
 
-`assets/heart-gauge.png` is the approved oil-painted master artwork. Run `npm run icons` to
-export the opaque 64px favicon, 180px iPhone, 192px/512px install icons and separate
-512px maskable icon, using the existing Playwright Chromium installation. Keep
-standard exports faithful to the approved source. The maskable export adds
-padding to fit the centered 80%-diameter safe circle. When artwork changes,
-increment discovery URL revisions in HTML/manifest and the worker cache version.
-The master is outside `public/` and is not downloaded or cached by the app.
+## App icons and README image
 
-For hosting validation and release procedures, see [operations](deployment.md).
+`assets/heart-gauge.png` is the approved oil-painted master. After installing the
+tools above, run `npm run icons` to derive the 64px favicon, 180px iPhone icon,
+192px/512px install icons and separate padded 512px maskable icon. Keep the
+approved source intact; the maskable export fits the centered 80%-diameter safe
+circle. After an artwork change, revise icon discovery URLs in HTML/manifest
+and the shell cache. The master is outside public hosting and precaching.
+
+The README image is `docs/images/preview.png`: the English desktop layout at
+1280×800 with sample position 7, captured without a focused control. Refresh it
+when the visible app changes; it is not a runtime asset.

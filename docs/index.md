@@ -1,10 +1,21 @@
 # Documentation
 
-- [Development](development.md)
-- [Public-readiness review](reviews/2026-11-15-public-readiness.md)
-- [Deployment and operations](deployment.md)
-- [Verification](verification.md)
-- [Machine guide](../AGENTS.md)
+## Current guides
+
+- [README](../README.md): what the app does, live link and a Python-only preview.
+- [Development](development.md): test tools, checks, editing and icon exports.
+- [Self-hosting and operations](deployment.md): static hosting, the personal VM,
+  verification, offline updates and rollback.
+- [Machine guide](../AGENTS.md): file map, responsibilities and implementation rules.
+
+## Review and verification history
+
+[Verification](verification.md) records dated release observations, with the most
+recent functional checks linked first. The [public-readiness review](reviews/2026-11-15-public-readiness.md)
+is a snapshot of that review, not a current test count or list of features.
+
+Decision records below preserve the context at the time. Later amendments and
+superseding records take precedence; use the current guides for setup and use.
 
 ## Decisions
 

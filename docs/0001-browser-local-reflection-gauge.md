@@ -1,5 +1,6 @@
 # 0001: Browser-local reflection gauge
 
+Publication policy changed in [decision 0011](0011-public-repository-readiness.md).
 Haptic feedback was removed by [decision 0016](0016-remove-haptic-feedback.md).
 
 - Status: Accepted
