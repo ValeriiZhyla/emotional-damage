@@ -632,61 +632,6 @@ h1 em {
   outline: 2px solid var(--ink);
   outline-offset: 3px;
 }
-.haptics-option {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  justify-content: space-between;
-  margin: 20px 0;
-  cursor: pointer;
-}
-.preference-label,
-.preference-caption {
-  display: block;
-}
-.preference-label {
-  font-size: 13px;
-  font-weight: 600;
-}
-.preference-caption {
-  font-size: 12px;
-  color: var(--muted);
-  margin-top: 5px;
-  line-height: 1.5;
-}
-#haptics {
-  -webkit-appearance: none;
-  appearance: none;
-  flex-shrink: 0;
-  margin: 0;
-  width: 46px;
-  height: 28px;
-  border: 1px solid #777;
-  border-radius: 20px;
-  background: #242424;
-  position: relative;
-  cursor: pointer;
-}
-#haptics::after {
-  content: '';
-  position: absolute;
-  top: 3px;
-  left: 3px;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: #fff;
-  box-shadow: 0 1px 3px #0003;
-  transition: transform 0.15s;
-}
-#haptics:checked {
-  background: #f5f5f5;
-  border-color: #f5f5f5;
-}
-#haptics:checked::after {
-  transform: translateX(18px);
-  background: #242424;
-}
 .privacy-note {
   font-size: 12px;
   line-height: 1.5;

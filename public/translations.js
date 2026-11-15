@@ -27,8 +27,6 @@ export const translations = {
     infoFootnote: 'The descriptions are a rough guide, not a test or medical advice.',
     settingsTitle: 'Settings',
     languageLabel: 'Language',
-    hapticsLabel: 'Haptic feedback',
-    hapticsCaption: 'A light vibration as you move the marker.',
     privacyNote:
       'Your last position and settings are saved only in this browser on this device. No account or tracking.',
     storageNote: 'Clearing site data also removes your saved position and settings.',
@@ -71,8 +69,6 @@ export const translations = {
       'Die Beschreibungen dienen zur Orientierung. Kein Test, keine medizinische Beratung.',
     settingsTitle: 'Einstellungen',
     languageLabel: 'Sprache',
-    hapticsLabel: 'Vibration',
-    hapticsCaption: 'Eine leichte Vibration beim Verschieben des Reglers.',
     privacyNote:
       'Dein letzter Stand und deine Einstellungen werden nur in diesem Browser auf diesem Gerät gespeichert. Ohne Konto und Tracking.',
     storageNote:
@@ -114,8 +110,6 @@ export const translations = {
     infoFootnote: 'Описания — лишь ориентир. Это не тест и не медицинская рекомендация.',
     settingsTitle: 'Настройки',
     languageLabel: 'Язык',
-    hapticsLabel: 'Вибрация',
-    hapticsCaption: 'Лёгкая вибрация при движении ползунка.',
     privacyNote:
       'Положение ползунка и настройки сохраняются только в этом браузере на этом устройстве. Без аккаунта и отслеживания.',
     storageNote: 'Если удалить данные сайта, положение ползунка и настройки тоже сбросятся.',

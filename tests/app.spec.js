@@ -661,49 +661,42 @@ test('blocked storage leaves the gauge usable and explains that saving is unavai
   await expect(page.locator('#save-note')).toContainText('Can’t save in this browser');
 });
 
-test('optional haptics tolerate throwing APIs and hide when unsupported', async ({ page }) => {
-  await page.addInitScript(() =>
-    Object.defineProperty(navigator, 'vibrate', { value: undefined, configurable: true }),
-  );
-  await page.goto('/');
-  await page.locator('#open-settings').click();
-  await expect(page.locator('#haptics-option')).toBeHidden();
-  await page.locator('#settings-dialog .close-dialog').click();
-  await page.evaluate(() =>
-    Object.defineProperty(navigator, 'vibrate', {
-      value: () => {
-        throw new Error('Device disabled');
-      },
-      configurable: true,
-    }),
-  );
-  await page.locator('[data-zone="3"]').click();
-  await expect(page.locator('#stress')).toHaveValue('17');
-});
-
-test('haptic preference persists and a blocked vibration cannot interrupt movement', async ({
+test('legacy preferences preserve position and language without haptic controls or API access', async ({
   page,
 }) => {
-  await page.addInitScript(() => {
-    window.vibrations = [];
+  await page.addInitScript((key) => {
+    if (!localStorage.getItem(key))
+      localStorage.setItem(
+        key,
+        JSON.stringify({ version: 1, value: 14, language: 'de', haptics: true }),
+      );
+    // Even querying the retired API is unexpected, regardless of browser support.
+    window.vibrationAccesses = 0;
     Object.defineProperty(navigator, 'vibrate', {
-      value: (value) => {
-        window.vibrations.push(value);
-        throw new Error('Unavailable');
-      },
       configurable: true,
+      get() {
+        window.vibrationAccesses++;
+        throw new Error('The retired vibration API must not be accessed');
+      },
     });
-  });
+  }, KEY);
   await page.goto('/');
-  await page.locator('[data-zone="2"]').click();
-  await expect(page.locator('#stress')).toHaveValue('12');
-  expect(await page.evaluate(() => window.vibrations)).toEqual([12]);
+  await expect(page.locator('#stress')).toHaveValue('14');
+  await expect(page.locator('html')).toHaveAttribute('lang', 'de');
   await page.locator('#open-settings').click();
-  await page.locator('#haptics').uncheck();
+  await expect(page.getByRole('switch')).toHaveCount(0);
+  await expect(page.locator('#settings-dialog input[type="checkbox"]')).toHaveCount(0);
   await page.locator('#settings-dialog .close-dialog').click();
+  await page.locator('#stress').press('End');
+  expect(await page.evaluate((key) => JSON.parse(localStorage.getItem(key)), KEY)).toEqual({
+    version: 1,
+    value: 19,
+    language: 'de',
+  });
   await page.reload();
-  await page.locator('[data-zone="3"]').click();
-  expect(await page.evaluate(() => window.vibrations)).toEqual([]);
+  await expect(page.locator('#stress')).toHaveValue('19');
+  await expect(page.locator('html')).toHaveAttribute('lang', 'de');
+  expect(await page.evaluate(() => window.vibrationAccesses)).toBe(0);
 });
 
 test('a second tab follows saved changes', async ({ page, context }) => {
@@ -803,9 +796,6 @@ for (const language of ['en', 'de', 'ru']) {
   test(`both dialogs are centered and fit phone browser heights in ${language}`, async ({
     page,
   }) => {
-    await page.addInitScript(() =>
-      Object.defineProperty(navigator, 'vibrate', { value: () => true, configurable: true }),
-    );
     await page.goto('/');
     await page.locator('#open-settings').click();
     await page.locator(`.language-options label:has(input[value="${language}"])`).click();
@@ -836,7 +826,6 @@ for (const language of ['en', 'de', 'ru']) {
           dialog.locator(name === 'info' ? '[data-i18n="infoFootnote"]' : '#github'),
         ).toBeInViewport({ ratio: 1 });
         if (name === 'settings') {
-          await expect(page.locator('#haptics-option')).toBeVisible();
           const choices = await Promise.all(
             (await dialog.locator('.language-options label').all()).map((label) =>
               label.boundingBox(),
@@ -853,9 +842,6 @@ for (const language of ['en', 'de', 'ru']) {
 }
 
 test('short screens and doubled dialog text keep all content reachable', async ({ page }) => {
-  await page.addInitScript(() =>
-    Object.defineProperty(navigator, 'vibrate', { value: () => true, configurable: true }),
-  );
   await page.setViewportSize({ width: 320, height: 480 });
   await page.goto('/');
   await page.locator('#open-settings').click();
@@ -865,7 +851,7 @@ test('short screens and doubled dialog text keep all content reachable', async (
   await page.evaluate(() => {
     const sizes = [
       ...document.querySelectorAll(
-        '.sheet h2, .sheet h3, .sheet p, .sheet legend, .language-choices, .preference-label, .preference-caption',
+        '.sheet h2, .sheet h3, .sheet p, .sheet legend, .language-choices',
       ),
     ].map((el) => [el, parseFloat(getComputedStyle(el).fontSize)]);
     for (const [element, size] of sizes) element.style.fontSize = `${size * 2}px`;

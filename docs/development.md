@@ -33,7 +33,7 @@ localization, storage failures and cross-tab updates, first-paint restoration,
 failed initialization, dialogs, responsive layout, offline reload and automated
 WCAG A/AA checks. Engine-specific native touch tests are explicitly skipped where
 the necessary browser APIs are unavailable. Emulation does not exercise a native
-Telegram/ChatGPT sheet, physical haptics or home-screen installation on an iPhone.
+Telegram/ChatGPT sheet or home-screen installation on an iPhone.
 Unit coverage measures the model, catalog and worker; it is not whole-app coverage.
 
 ## Module boundaries
@@ -42,8 +42,7 @@ Unit coverage measures the model, catalog and worker; it is not whole-app covera
   geometry and accent interpolation. It has no DOM, storage or network effects.
 - `public/translations.js` exports the EN/DE/RU catalog. English HTML fallbacks
   must match; tests check keys, types and fallback text.
-- `public/app.js` owns the DOM, input gestures, dialogs, optional haptics and
-  localStorage. A remote storage update releases old pointer ownership before
+- `public/app.js` owns the DOM, input gestures, dialogs and localStorage. A remote storage update releases old pointer ownership before
   rendering the new state.
 - `public/boot.js` hides unsaved defaults before paint. After initialization the
   app reveals itself; a failed module load or initialization shows a retry view.
@@ -51,8 +50,10 @@ Unit coverage measures the model, catalog and worker; it is not whole-app covera
   and increment its cache version whenever a cached file changes.
 
 Keep the storage key and version compatible unless a migration is deliberately
-introduced. Malformed or inaccessible storage must leave the app usable. Optional
-vibration, offline installation and embedded-browser bridges must fail harmlessly.
+introduced. Old v1 records containing a haptic preference remain readable; ignore
+that retired field and omit it from subsequent saves. Malformed or inaccessible
+storage must leave the app usable. Offline installation and embedded-browser
+bridges must fail harmlessly.
 
 ## App icons
 

@@ -1,5 +1,7 @@
 # Centered compact dialogs
 
+Haptic feedback was removed by [decision 0016](0016-remove-haptic-feedback.md).
+
 Status: Accepted
 
 Date: 2026-11-14

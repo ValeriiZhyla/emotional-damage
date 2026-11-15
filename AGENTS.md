@@ -20,7 +20,7 @@ in sync with translations; see decision 0005 for the copy conventions and source
 
 - `public/`: buildless, dependency-free browser app. Blocking `boot.js` marks the
   startup phase before styles/body paint; `app.js` restores and reveals the UI.
-  It owns gauge input, optional haptics, dialogs and browser-local persistence.
+  It owns gauge input, dialogs and browser-local persistence.
   `model.js` owns pure state validation, scale geometry and colour rules;
   `translations.js` owns the EN/DE/RU catalog. `boot.js` shows a localized retry
   view if module loading or initialization fails.
@@ -47,8 +47,9 @@ in sync with translations; see decision 0005 for the copy conventions and source
 
 - No backend, accounts, analytics, remote fonts, CDNs or server-side user data.
   `localStorage['emotional-damage.v1']` holds the last position and preferences.
-- Unsupported or disabled vibration must never prevent moving the gauge.
-  Hide haptic settings without support; respect reduced-motion preferences.
+- Haptic feedback is removed on every platform. Do not call vibration APIs or
+  show a haptics setting. Existing v1 records may contain the retired preference;
+  ignore it while preserving position/language and omit it on future saves.
 - Support touch, pointer, keyboard and native slider accessibility. Good at the
   top; exhausted at the bottom. Keep 20 steps with five inside each zone.
 - Keep the slider's visible focus ring for keyboard input. Pointer interactions
@@ -83,8 +84,7 @@ in sync with translations; see decision 0005 for the copy conventions and source
   900px and heights above 570px, use a wide two-column desktop layout; short
   landscape screens have a compact two-column layout from 600px width.
 - Info and Settings are centered native dialogs with content-driven heights.
-  Fit normal phone browser heights in all locales, including supported haptics;
-  keep overflow available for short screens or enlarged text rather than clipping
+  Fit normal phone browser heights in all locales; keep overflow available for short screens or enlarged text rather than clipping
   content. Focus the heading on opening and preserve keyboard control outlines,
   Escape and focus restoration. See decision 0007 for the compact dialog layout.
 - Save on movement; tolerate blocked storage and malformed stored values. Keep

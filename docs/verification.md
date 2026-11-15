@@ -372,3 +372,23 @@ screenshots, CI and publication results are recorded on the fix PR.
   evidence, public HTTPS/navigation, v16-to-v17 offline/settings retention and
   post-deployment resource/health observations are recorded on the release PR.
   Actual iPhone installation and OS-controlled icon refresh are not emulated.
+
+## 2026-11-15: Remove haptic feedback
+
+Removed vibration capability detection, invocation, timing and preference
+handling, together with the Settings control, its styles and EN/DE/RU strings.
+A source scan confirms no haptic/vibration references remain in public assets.
+Reduced-motion handling for visual effects remains in place.
+
+The state key and v1 parser remain compatible with older saved records. They
+preserve position/language, ignore retired preferences and drop those fields on
+the next save, without clearing or eagerly rewriting existing browser storage.
+Unit checks cover every position/language with both legacy boolean values; the
+browser regression guards the retired API and checks restore, Settings, movement,
+normalized save and reload. Dialog tests no longer inject vibration support.
+
+Decision 0016 records the removal and links the affected historical decisions.
+The offline shell advances to v18. Formatting, source/document consistency and
+Compose/Caddy configuration pass. Full local/CI results, exact-head review,
+public functionality, an existing v17 installation's offline/state upgrade and
+post-release readiness/resource observations are recorded on the release PR.
