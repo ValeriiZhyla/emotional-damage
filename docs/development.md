@@ -56,7 +56,7 @@ vibration, offline installation and embedded-browser bridges must fail harmlessl
 
 ## App icons
 
-`assets/heart-gauge.png` is the approved master artwork. Run `npm run icons` to
+`assets/heart-gauge.png` is the approved oil-painted master artwork. Run `npm run icons` to
 export the opaque 64px favicon, 180px iPhone, 192px/512px install icons and separate
 512px maskable icon, using the existing Playwright Chromium installation. Keep
 standard exports faithful to the approved source. The maskable export adds

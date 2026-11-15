@@ -35,6 +35,7 @@ export const translations = {
     installNote:
       'On iPhone, open this page in Safari: “Share” → “Add to Home Screen”. After the first online visit, the gauge also works offline.',
     back: 'Back',
+    repository: 'Source code on GitHub (opens in a new tab)',
     info: 'About this gauge',
     settings: 'Settings',
     close: 'Close',
@@ -79,6 +80,7 @@ export const translations = {
     installNote:
       'Auf dem iPhone in Safari: „Teilen“ → „Zu Home-Bildschirm hinzufügen“. Nach dem ersten Laden funktioniert die Skala auch offline.',
     back: 'Zurück',
+    repository: 'Quellcode auf GitHub (neuer Tab)',
     info: 'Über diese Skala',
     settings: 'Einstellungen',
     close: 'Schließen',
@@ -120,6 +122,7 @@ export const translations = {
     installNote:
       'На iPhone открой страницу в Safari: «Поделиться» → «На экран „Домой“». После первой загрузки шкала работает и без интернета.',
     back: 'Назад',
+    repository: 'Исходный код на GitHub (в новой вкладке)',
     info: 'Об этой шкале',
     settings: 'Настройки',
     close: 'Закрыть',

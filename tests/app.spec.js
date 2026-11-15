@@ -833,7 +833,7 @@ for (const language of ['en', 'de', 'ru']) {
         expect(await dialog.evaluate((el) => el.scrollWidth <= el.clientWidth + 1)).toBe(true);
         await expect(page.locator(`#${name}-title`)).toBeFocused();
         await expect(
-          dialog.locator(`[data-i18n="${name === 'info' ? 'infoFootnote' : 'installNote'}"]`),
+          dialog.locator(name === 'info' ? '[data-i18n="infoFootnote"]' : '#github'),
         ).toBeInViewport({ ratio: 1 });
         if (name === 'settings') {
           await expect(page.locator('#haptics-option')).toBeVisible();
@@ -875,9 +875,7 @@ test('short screens and doubled dialog text keep all content reachable', async (
     const dialog = page.locator(`#${name}-dialog`);
     expect(await dialog.evaluate((el) => el.scrollHeight > el.clientHeight)).toBe(true);
     expect(await dialog.evaluate((el) => el.scrollWidth <= el.clientWidth + 1)).toBe(true);
-    const last = dialog.locator(
-      `[data-i18n="${name === 'info' ? 'infoFootnote' : 'installNote'}"]`,
-    );
+    const last = dialog.locator(name === 'info' ? '[data-i18n="infoFootnote"]' : '#github');
     await last.scrollIntoViewIfNeeded();
     await expect(last).toBeInViewport({ ratio: 1 });
     await page.locator(`#${name}-title`).scrollIntoViewIfNeeded();
@@ -905,9 +903,98 @@ test('modals close with Escape, restore focus and respect reduced motion', async
   expect(duration).toBe('0s');
 });
 
-test('direct launch back button goes to the homepage', async ({ page }) => {
+test.describe('entry navigation', () => {
+  test.use({ serviceWorkers: 'block' });
+
+  test('Back appears only after entering from the main website, including reloads', async ({
+    page,
+    baseURL,
+  }) => {
+    for (const referer of [
+      undefined,
+      baseURL,
+      'https://example.com/',
+      'https://links.valeriizhyla.com/',
+      'https://valeriizhyla.com.example.com/',
+      'http://valeriizhyla.com/',
+    ]) {
+      await page.goto('/', { referer });
+      await expect(page.locator('#back')).toBeHidden();
+    }
+    // The main site's global policy stays private; only this card shares origin.
+    await page.route('https://valeriizhyla.com/**', (route) =>
+      route.fulfill({
+        contentType: 'text/html',
+        headers: { 'Referrer-Policy': 'no-referrer' },
+        body: `<a href="${baseURL}/" referrerpolicy="origin">Emotional Damage</a>`,
+      }),
+    );
+    await page.goto('https://valeriizhyla.com/?private=omitted');
+    await page.getByRole('link', { name: 'Emotional Damage' }).click();
+    await page.waitForURL(`${baseURL}/`);
+    expect(await page.evaluate(() => document.referrer)).toBe('https://valeriizhyla.com/');
+    await expect(page.locator('#back')).toBeVisible();
+    await page.reload();
+    await expect(page.locator('#back')).toBeVisible();
+    await page.locator('#back').click();
+    await page.waitForURL('https://valeriizhyla.com/');
+    await page.goto('/');
+    await expect(page.locator('#back')).toBeHidden();
+  });
+
+  test('installed launches hide Back even with a main-site referrer', async ({ context }) => {
+    for (const mode of ['display-mode', 'ios']) {
+      const page = await context.newPage();
+      await page.addInitScript((mode) => {
+        if (mode === 'ios') Object.defineProperty(navigator, 'standalone', { value: true });
+        else {
+          const nativeMatchMedia = window.matchMedia.bind(window);
+          window.matchMedia = (query) =>
+            query === '(display-mode: standalone)' ? { matches: true } : nativeMatchMedia(query);
+        }
+      }, mode);
+      await page.goto('/', { referer: 'https://valeriizhyla.com/' });
+      await expect(page.locator('#instrument')).toBeVisible();
+      await expect(page.locator('#back')).toBeHidden();
+      await page.close();
+    }
+  });
+});
+
+test('Settings ends with a localized GitHub link that leaves the gauge open', async ({
+  page,
+  context,
+}) => {
+  await context.route('https://github.com/ValeriiZhyla/emotional-damage', (route) =>
+    route.fulfill({
+      contentType: 'text/html',
+      body: '<title>Repository</title>',
+    }),
+  );
   await page.goto('/');
-  await expect(page.locator('#back')).toHaveAttribute('href', 'https://valeriizhyla.com');
+  await page.locator('#open-settings').click();
+  const labels = {
+    en: 'Source code on GitHub (opens in a new tab)',
+    de: 'Quellcode auf GitHub (neuer Tab)',
+    ru: 'Исходный код на GitHub (в новой вкладке)',
+  };
+  const link = page.locator('#github');
+  for (const [language, label] of Object.entries(labels)) {
+    await page.locator(`.language-options label:has(input[value="${language}"])`).click();
+    await expect(link).toHaveAccessibleName(label);
+  }
+  const bounds = await link.boundingBox();
+  expect(bounds.width).toBeGreaterThanOrEqual(44);
+  expect(bounds.height).toBeGreaterThanOrEqual(44);
+  await link.focus();
+  const [popup] = await Promise.all([page.waitForEvent('popup'), page.keyboard.press('Enter')]);
+  await popup.waitForLoadState();
+  expect(popup.url()).toBe('https://github.com/ValeriiZhyla/emotional-damage');
+  expect(await popup.evaluate(() => window.opener)).toBeNull();
+  expect(await popup.evaluate(() => document.referrer)).toBe('');
+  await expect(page.locator('#settings-dialog')).toBeVisible();
+  await expect(page.locator('#stress')).toHaveValue('2');
+  await popup.close();
 });
 
 test('gauge extremes and both sheets pass automated accessibility checks', async ({ page }) => {

@@ -5,6 +5,10 @@
 A one-screen reflection fidget at `https://stress.valeriizhyla.com`. The user
 authorized public access and a card on the personal homepage. Four zones, each
 with five positions: Okay, Tired, Overloaded, Exhausted. English, German, Russian.
+Show the header Back link only for an exact HTTPS main-domain referrer, and never
+for an installed/standalone launch. Keep direct visits self-contained and avoid
+sticky navigation flags. Settings ends with a local GitHub icon linking to the
+public repository in a separate tab, with a localized accessible name.
 Keep the tone personal and descriptive; this is not a diagnostic or advice tool.
 Write each locale as natural, concise UI copy rather than a literal translation.
 Use informal singular address in German and Russian, gender-neutral Russian
@@ -29,7 +33,7 @@ in sync with translations; see decision 0005 for the copy conventions and source
   preserves that artwork using the existing development browser. Standard icons
   retain its composition; the separate maskable export keeps the emblem inside
   the centered 80%-diameter safe circle. Revision discovery URLs and shell cache
-  when artwork changes. See decision 0013.
+  when artwork changes. See decision 0014.
 - `Caddyfile`: static server on 8080 and loopback readiness on 8081. No admin API.
 - `compose.yaml`: pinned image, read-only unprivileged server, external `proxy`
   network alias `emotional-damage`, no host ports, health and resource limits.
@@ -89,7 +93,7 @@ in sync with translations; see decision 0005 for the copy conventions and source
   locale. Suppress transitions during startup and flush restored layout before
   revealing the app; keep normal movement transitions afterward. Cache boot.js
   with the offline shell. Without JavaScript, retain the static/noscript fallback.
-  See decisions 0009 and 0011; failed initialization must offer Retry and Back.
+  See decisions 0009 and 0011; failed initialization must offer Retry and preserve the same conditional Back link.
 - Preserve administrator access and other applications. The shared ingress in
   `../personal-infra/` owns TLS and the homepage. Read its `AGENTS.md` before edits.
 - No persistent server volume is needed: state belongs to each browser/device.

@@ -705,6 +705,15 @@ h1 em {
   padding-top: 12px;
   margin-top: 16px;
 }
+.settings-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 12px;
+}
+.repository-link svg {
+  fill: currentColor;
+  stroke: none;
+}
 .noscript {
   font-size: 12px;
   line-height: 1.5;

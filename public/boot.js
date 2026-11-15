@@ -1,6 +1,20 @@
 // Run before styles or body content can paint their unsaved defaults.
 document.documentElement.classList.add('starting');
 
+// Only a visit from the main website gets a route back to it. Keep direct and
+// installed launches self-contained; no session flag can leak into a later visit.
+window.addEventListener('DOMContentLoaded', () => {
+  let fromHome = false;
+  try {
+    fromHome = new URL(document.referrer).origin === 'https://valeriizhyla.com';
+  } catch {
+    /* An absent or unavailable referrer is a direct visit. */
+  }
+  const standalone =
+    matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+  document.querySelector('#back').hidden = !fromHome || standalone;
+});
+
 // load waits for the module and its imports. If initialization failed, give the
 // user a usable error view instead of leaving the whole interface hidden.
 window.addEventListener('load', () => {
