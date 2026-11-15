@@ -1,5 +1,25 @@
 # Verification
 
+## Most recent functional verification
+
+Recorded 2026-11-15 for [release PR 18](https://github.com/ValeriiZhyla/emotional-damage/pull/18),
+reviewed head `72c3a6df9d104e6ff8950e5fd60a0ce9c639041d`, deployed main
+`97ce31887533fbda8c5a1e7b64797152b8fa08cb`.
+
+- Local and CI checks: 14 unit tests and 114 browser checks passed; six
+  engine/API-specific cases intentionally skipped.
+- Public HTTPS/security/assets/readiness checks and Chromium, mobile WebKit and
+  Firefox checks passed. An existing v17 installation upgraded to v18, kept its
+  position/language and reloaded offline after a normalized save.
+- The app and existing infrastructure services were healthy. The app used
+  approximately 12 MiB / 64 MiB at inspection. This is dated evidence, not live
+  monitoring or physical iPhone certification.
+
+See the [release evidence](https://github.com/ValeriiZhyla/emotional-damage/pull/18#issuecomment-6895205294)
+for exact scope and limits. The chronological entries below preserve historical
+features, artwork and counts; use [current guides](index.md#current-guides) for
+setup and [decision 0016](0016-remove-haptic-feedback.md) for haptic removal.
+
 ## 2026-11-13: Initial release
 
 - Compose and pinned Caddy configuration validated in an isolated container.
@@ -391,4 +411,4 @@ Decision 0016 records the removal and links the affected historical decisions.
 The offline shell advances to v18. Formatting, source/document consistency and
 Compose/Caddy configuration pass. Full local/CI results, exact-head review,
 public functionality, an existing v17 installation's offline/state upgrade and
-post-release readiness/resource observations are recorded on the release PR.
+post-release readiness/resource observations are recorded on [PR 18](https://github.com/ValeriiZhyla/emotional-damage/pull/18#issuecomment-6895205294).

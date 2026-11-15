@@ -41,7 +41,10 @@ in sync with translations; see decision 0005 for the copy conventions and source
 - `tests/`, `playwright.config.js`: Node unit tests and Chromium, mobile WebKit
   and Firefox functional checks. Prettier enforces readable source formatting.
 - `.github/workflows/checks.yml`: browser tests and deployment config validation.
-- `docs/`: indexed decisions, operating procedures and dated verification.
+- `docs/`: current guides, indexed decisions and dated verification.
+  `docs/images/preview.png` is a documentation-only screenshot with sample state.
+  Historical reviews/decisions retain their evidence and link later supersessions;
+  current setup belongs in the guides.
 
 ## Invariants
 
@@ -84,8 +87,8 @@ in sync with translations; see decision 0005 for the copy conventions and source
   900px and heights above 570px, use a wide two-column desktop layout; short
   landscape screens have a compact two-column layout from 600px width.
 - Info and Settings are centered native dialogs with content-driven heights.
-  Fit normal phone browser heights in all locales; keep overflow available for short screens or enlarged text rather than clipping
-  content. Focus the heading on opening and preserve keyboard control outlines,
+  Fit normal phone browser heights in all locales; keep overflow available for
+  short screens or enlarged text rather than clipping content. Focus the heading on opening and preserve keyboard control outlines,
   Escape and focus restoration. See decision 0007 for the compact dialog layout.
 - Save on movement; tolerate blocked storage and malformed stored values. Keep
   manual language preference, with browser language used only as the default.
@@ -93,7 +96,8 @@ in sync with translations; see decision 0005 for the copy conventions and source
   locale. Suppress transitions during startup and flush restored layout before
   revealing the app; keep normal movement transitions afterward. Cache boot.js
   with the offline shell. Without JavaScript, retain the static/noscript fallback.
-  See decisions 0009 and 0011; failed initialization must offer Retry and preserve the same conditional Back link.
+  See decisions 0009 and 0011; failed initialization must offer Retry and
+  preserve the same conditional Back link.
 - Preserve administrator access and other applications. The shared ingress in
   `../personal-infra/` owns TLS and the homepage. Read its `AGENTS.md` before edits.
 - No persistent server volume is needed: state belongs to each browser/device.
@@ -109,8 +113,8 @@ head, checks and any reused evidence on the PR. Resolve blockers and pass CI
 before merging/deploying. Review with the current subscription-authenticated
 agent; no separate reviewer or AI API job unless requested.
 
-Run `npm ci`, `npm run check`, `npm test` (Node unit tests and all three browser engines), and
-`sudo ./scripts/validate.sh` for relevant changes. Validate before deployment;
+Run `npm ci`, `npm run check`, `npm test` (Node unit tests and all three browser
+engines), and `sudo ./scripts/validate.sh` for relevant changes. Validate before deployment;
 verify real HTTPS, functionality, persistence and existing infra health afterward.
 Use `scripts/deploy.sh` so Caddyfile changes trigger recreation through its config
 checksum label. Source files are mounted; edits in a live checkout are immediate.

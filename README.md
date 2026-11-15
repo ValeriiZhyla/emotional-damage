@@ -1,13 +1,38 @@
 # Emotional Damage
 
-A small, tactile space to notice how you feel. [Open the gauge](https://stress.valeriizhyla.com).
+A one-screen reflection fidget. Move the gauge to match how you feel; there’s no
+right answer.
 
-Four zones, twenty positions. English, German and Russian. No account, tracking or
-backend: your last position and settings stay in your browser on this device.
-The gauge works offline after its first successful online visit.
+**[Open the app](https://stress.valeriizhyla.com/)**
 
-For a local preview, run `npm run preview` and open `http://127.0.0.1:18123`.
-See [development](docs/development.md) for requirements and checks, or
-[operations](docs/deployment.md) to host it yourself.
+![Emotional Damage: a dark, two-column layout with a warm glow and the gauge set to Tired.](docs/images/preview.png)
+
+- Four levels: Okay, Tired, Overloaded and Exhausted, with twenty positions.
+- Drag the marker, tap a level, or focus the gauge and use the arrow keys.
+- English, German and Russian. Layouts for phones and larger screens.
+- Offline use after the first online visit finishes caching; add it to your home screen for quick access.
+
+No account, tracking or backend. Your last position and language stay in this
+browser on this device. They don’t sync between devices, and clearing site data
+removes them. The scale is a prompt to reflect, not a test.
+
+## Run locally
+
+With Git and Python 3 installed:
+
+```bash
+git clone https://github.com/ValeriiZhyla/emotional-damage.git
+cd emotional-damage
+python3 -m http.server 18123 --bind 127.0.0.1 --directory public
+```
+
+Open [127.0.0.1:18123](http://127.0.0.1:18123). No build or package installation is
+needed to preview the app. Node.js is only needed for development tools.
+
+## More
+
+- [Development and checks](docs/development.md)
+- [Self-hosting and operations](docs/deployment.md)
+- [Documentation index and decisions](docs/index.md)
 
 Licensed under [MIT](LICENSE).
