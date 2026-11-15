@@ -344,3 +344,31 @@ screenshots, CI and publication results are recorded on the fix PR.
   localStorage schema are preserved. Public asset, previous-installation update,
   saved-state, offline and health/resource evidence is recorded on the release PR.
   Existing home-screen icon refresh remains controlled by the device.
+
+## 2026-11-15: Oil-painted icon and contextual navigation
+
+- Replaced the master with the exact selected second, oil-painted preview.
+  Standard favicon/install exports preserve it; the Android maskable export
+  adds safe-area padding. The 2.47MB master stays outside public hosting and
+  precaching. Repeat exports are byte-identical, and small/circular previews
+  were visually inspected.
+- Three-engine probes pass every revision-4 icon URL's exact hash, dimensions,
+  opacity and maskable safe-circle containment online and offline. The v17
+  shell includes all thirteen paths and excludes the master artwork.
+- Back is hidden by default and shown only for the exact HTTPS main-origin
+  referrer, excluding standalone/iOS installed launches. A normal link replaces
+  arbitrary-history navigation. The separate homepage release grants an
+  origin-only referrer on its Emotional Damage card; other links and global
+  privacy policy stay intact.
+- Settings ends with a local GitHub icon. Its accessible name is localized, its
+  target is at least 44px and keyboard activation opens the correct repository
+  separately without an opener or referrer. Existing gauge state stays in place.
+- All 27 focused Chromium/mobile WebKit/Firefox checks pass for entry/reload/
+  direct-visit behavior, standalone flags, GitHub navigation, initialization
+  failure, scripting-disabled fallback and dialog fit. All three locales fit
+  normal phone heights with haptics; short/enlarged layouts retain overflow.
+- Decisions 0014 and 0015 record these interfaces. Formatting, reproducible
+  exports and Compose/Caddy validation pass. Full-suite and exact-head review
+  evidence, public HTTPS/navigation, v16-to-v17 offline/settings retention and
+  post-deployment resource/health observations are recorded on the release PR.
+  Actual iPhone installation and OS-controlled icon refresh are not emulated.

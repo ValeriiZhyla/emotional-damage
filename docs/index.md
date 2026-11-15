@@ -22,4 +22,6 @@
 | 0010   | [Refined glow and colour progression](0010-refined-glow-and-colour-progression.md)                 | Accepted                           |
 | 0011   | [Public repository readiness](0011-public-repository-readiness.md)                                 | Accepted                           |
 | 0012   | [Soft heart app icon](0012-soft-heart-app-icon.md)                                                 | Superseded by 0013                 |
-| 0013   | [Approved heart gauge icon](0013-approved-heart-gauge-icon.md)                                     | Accepted                           |
+| 0013   | [Approved heart gauge icon](0013-approved-heart-gauge-icon.md)                                     | Superseded by 0014                 |
+| 0014   | [Oil-painted heart gauge icon](0014-oil-painted-heart-gauge-icon.md)                               | Accepted                           |
+| 0015   | [Contextual Back and repository link](0015-contextual-back-and-repository-link.md)                 | Accepted                           |

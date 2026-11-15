@@ -1,6 +1,6 @@
 # Approved heart gauge icon
 
-Status: Accepted
+Status: Superseded by [0014 — Oil-painted heart gauge icon](0014-oil-painted-heart-gauge-icon.md)
 
 Date: 2026-11-15
 

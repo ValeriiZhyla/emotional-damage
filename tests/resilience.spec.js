@@ -19,7 +19,7 @@ test('failed entry script or imports show a usable error view and retry recovers
     await expect(page.locator('#open-settings')).toBeDisabled();
     await expect(page.locator('#stress')).toBeDisabled();
     await expect(page.locator('#retry-load')).toBeEnabled();
-    await expect(page.locator('#back')).toHaveAttribute('href', 'https://valeriizhyla.com');
+    await expect(page.locator('#back')).toBeHidden();
     await page.unroute(pattern);
     await page.locator('#retry-load').click();
     await expect(page.locator('#stress')).toBeEnabled();
@@ -153,7 +153,7 @@ test('opening a modal or hiding the page ends a pending drag cleanly', async ({ 
   }
 });
 
-test('the static fallback and Back stay visible with scripting disabled', async ({
+test('the static fallback stays usable without an exit link when scripting is disabled', async ({
   browser,
   baseURL,
 }) => {
@@ -162,6 +162,6 @@ test('the static fallback and Back stay visible with scripting disabled', async 
   await page.goto('/');
   await expect(page.locator('.app')).toBeVisible();
   await expect(page.locator('noscript p')).toBeVisible();
-  await expect(page.locator('#back')).toBeVisible();
+  await expect(page.locator('#back')).toBeHidden();
   await context.close();
 });

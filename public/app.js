@@ -87,6 +87,7 @@ function renderLanguage() {
     element.textContent = text[element.dataset.i18n];
   for (const [selector, key] of [
     ['#back', 'back'],
+    ['#github', 'repository'],
     ['#open-info', 'info'],
     ['#open-settings', 'settings'],
     ['#instrument', 'instrument'],
@@ -301,15 +302,6 @@ for (const [trigger, selector] of [
       dialog.close();
   });
 }
-
-document.querySelector('#back').addEventListener('click', (event) => {
-  // Only use history when an actual previous document is known. A direct or
-  // home-screen visit always has a useful homepage fallback.
-  if (document.referrer && history.length > 1) {
-    event.preventDefault();
-    history.back();
-  }
-});
 
 window.addEventListener('storage', (event) => {
   if (event.key !== STORAGE_KEY && event.key !== null) return;
