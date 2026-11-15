@@ -56,10 +56,12 @@ vibration, offline installation and embedded-browser bridges must fail harmlessl
 
 ## App icons
 
-Edit `public/icons/icon.svg`, then run `npm run icons` to export the opaque
-180px iPhone, 192px and 512px install icons. This uses the existing Playwright
-Chromium installation. Keep the silhouette inside the centered 80%-diameter
-circle so it survives platform masks. When the artwork changes, increment the
-icon discovery URL revision in HTML/manifest and the worker shell cache version.
+`assets/heart-gauge.png` is the approved master artwork. Run `npm run icons` to
+export the opaque 64px favicon, 180px iPhone, 192px/512px install icons and separate
+512px maskable icon, using the existing Playwright Chromium installation. Keep
+standard exports faithful to the approved source. The maskable export adds
+padding to fit the centered 80%-diameter safe circle. When artwork changes,
+increment discovery URL revisions in HTML/manifest and the worker cache version.
+The master is outside `public/` and is not downloaded or cached by the app.
 
 For hosting validation and release procedures, see [operations](deployment.md).

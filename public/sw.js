@@ -1,4 +1,4 @@
-const CACHE = 'emotional-damage-shell-v15';
+const CACHE = 'emotional-damage-shell-v16';
 const SHELL = [
   '/',
   '/index.html',
@@ -8,9 +8,10 @@ const SHELL = [
   '/model.js',
   '/translations.js',
   '/manifest.webmanifest',
-  '/icons/icon.svg',
+  '/icons/icon-64.png',
   '/icons/icon-192.png',
   '/icons/icon-512.png',
+  '/icons/icon-maskable-512.png',
   '/icons/apple-touch-icon.png',
 ];
 const NETWORK_TIMEOUT_MS = 2000;

@@ -1,6 +1,6 @@
 # Soft heart app icon
 
-Status: Accepted
+Status: Superseded by [0013](0013-approved-heart-gauge-icon.md)
 
 Date: 2026-11-15
 
