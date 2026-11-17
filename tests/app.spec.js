@@ -3,7 +3,7 @@ import AxeBuilder from '@axe-core/playwright';
 
 const KEY = 'emotional-damage.v1';
 const titles = {
-  en: ['Okay', 'Tired', 'Overloaded', 'Exhausted'],
+  en: ['Good', 'Tired', 'Overloaded', 'Exhausted'],
   de: ['Gut', 'Müde', 'Überlastet', 'Erschöpft'],
   ru: ['Хорошо', 'Усталость', 'Перегрузка', 'Истощение'],
 };

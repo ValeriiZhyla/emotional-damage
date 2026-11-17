@@ -74,6 +74,6 @@ and the shell cache. The master is outside public hosting and precaching.
 
 README screenshots use sample state and no focused control: `docs/images/preview.png`
 is the English desktop layout at 1280×800, position 7 (Tired); `docs/images/mobile.png`
-is the English mobile WebKit layout at 440×956, position 2 (Okay). The mobile
+is the English mobile WebKit layout at 440×956, position 2 (Good). The mobile
 capture is browser emulation, not a physical iPhone screenshot. Refresh both when
 the visible app changes; neither is a runtime asset.

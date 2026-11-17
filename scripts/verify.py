@@ -27,7 +27,7 @@ def main():
     assert headers["Location"] == ORIGIN + "/"
     headers, body = fetch(ORIGIN + "/")
     html = body.decode()
-    assert all(text in html for text in ("Emotional Damage", "Okay", "Tired", "Overloaded", "Exhausted", 'max="19"'))
+    assert all(text in html for text in ("Emotional Damage", "Good", "Tired", "Overloaded", "Exhausted", 'max="19"'))
     assert "script-src 'self'" in headers.get("Content-Security-Policy", "")
     assert "worker-src 'self'" in headers["Content-Security-Policy"]
     assert headers.get("X-Frame-Options") == "DENY"

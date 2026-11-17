@@ -8,10 +8,10 @@ right answer.
 <p align="center">
   <img src="docs/images/preview.png" width="72%" alt="Desktop layout with a warm glow and the gauge set to Tired." />
   &nbsp;
-  <img src="docs/images/mobile.png" width="20.71%" alt="Phone layout with a green glow and the gauge set to Okay." />
+  <img src="docs/images/mobile.png" width="20.71%" alt="Phone layout with a green glow and the gauge set to Good." />
 </p>
 
-- Four levels: Okay, Tired, Overloaded and Exhausted, with twenty positions.
+- Four levels: Good, Tired, Overloaded and Exhausted, with twenty positions.
 - Drag the marker, tap a level, or focus the gauge and use the arrow keys.
 - English, German and Russian. Layouts for phones and larger screens.
 - Offline use after the first online visit finishes caching; add it to your home screen for quick access.

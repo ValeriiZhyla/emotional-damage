@@ -2,6 +2,7 @@
 
 Publication policy changed in [decision 0011](0011-public-repository-readiness.md).
 Haptic feedback was removed by [decision 0016](0016-remove-haptic-feedback.md).
+The first zone was renamed Good (Gut / Хорошо) on 2026-11-17.
 
 - Status: Accepted
 - Date: 2026-11-13
