@@ -3,7 +3,7 @@ export const translations = {
     eyebrow: 'A MOMENT FOR YOURSELF',
     question: 'How are you,',
     really: 'really?',
-    zone0: 'Okay',
+    zone0: 'Good',
     zone1: 'Tired',
     zone2: 'Overloaded',
     zone3: 'Exhausted',

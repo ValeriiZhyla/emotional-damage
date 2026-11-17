@@ -4,7 +4,7 @@
 
 A one-screen reflection fidget at `https://stress.valeriizhyla.com`. The user
 authorized public access and a card on the personal homepage. Four zones, each
-with five positions: Okay, Tired, Overloaded, Exhausted. English, German, Russian.
+with five positions: Good, Tired, Overloaded, Exhausted. English, German, Russian.
 Show the header Back link only for an exact HTTPS main-domain referrer, and never
 for an installed/standalone launch. Keep direct visits self-contained and avoid
 sticky navigation flags. Settings ends with a local GitHub icon linking to the
